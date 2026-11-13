@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+:root {
+  --sp-primary: #1F06AC;
+  --sp-blue: #0F42C0;
+  --sp-accent: #E3EF4F;
+  --sp-bg: #F6F7FB;
+  --sp-border: #D5DCF3;
+  --sp-border-input: #C9D2F0;
+  --sp-text: #0E0B33;
+  --sp-muted: #4A4F78;
+}
+
+body {
+  margin: 0;
+  background: #F6F7FB;
+  color: #0E0B33;
+  font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow-x: hidden;
+}
+
+/* mono accent style matching the design board */
+.m,
+.sp-mono {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* blueprint grid background pattern from design board */
+.bg-blueprint-grid {
+  background-color: #1F06AC;
+  background-image:
+    linear-gradient(rgba(88, 130, 232, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 130, 232, 0.22) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.bg-blueprint-grid-sm {
+  background-color: #1F06AC;
+  background-image:
+    linear-gradient(rgba(88, 130, 232, 0.22) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(88, 130, 232, 0.22) 1px, transparent 1px);
+  background-size: 24px 24px;
+}

@@ -1,0 +1,102 @@
+import React from 'react';
+import Link from 'next/link';
+import {
+  getProductByIdOrSlug,
+  listCategories,
+  listProducts,
+} from '@/lib/db';
+import { StoreHeader } from '@/components/store/StoreHeader';
+import { StoreFooter } from '@/components/store/StoreFooter';
+import { ProductDetailsClient } from '@/components/store/ProductDetailsClient';
+import { ProductCard } from '@/components/store/ProductCard';
+
+export const dynamic = 'force-dynamic';
+
+export default async function ProductDetailsPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const [categories, activeProducts, product] = await Promise.all([
+    listCategories(),
+    listProducts({ activeOnly: true }),
+    getProductByIdOrSlug(id, { activeOnly: true }),
+  ]);
+
+  if (!product) {
+    return (
+      <div className="min-h-screen flex flex-col bg-white text-slate-900">
+        <StoreHeader categories={categories} />
+        <main className="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-16 flex-1">
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-10 max-w-xl mx-auto text-center flex flex-col gap-3 items-center">
+            <h1 className="text-2xl font-bold text-slate-900 m-0">
+              Product Not Available
+            </h1>
+            <p className="text-sm m-0 text-slate-600">
+              This product either does not exist or has been marked inactive and
+              cannot be ordered.
+            </p>
+            <Link
+              href="/products"
+              className="mt-2 rounded-md bg-[#1F06AC] text-white px-5 py-2.5 text-sm font-medium hover:bg-[#170485]"
+            >
+              Back to Catalog
+            </Link>
+          </div>
+        </main>
+        <StoreFooter />
+      </div>
+    );
+  }
+
+  const related = activeProducts
+    .filter((p) => p.category_id === product.category_id && p.id !== product.id)
+    .slice(0, 3);
+
+  return (
+    <div className="min-h-screen flex flex-col bg-white text-slate-900">
+      <StoreHeader categories={categories} />
+
+      <main className="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex-1">
+        <nav className="text-sm text-slate-500 mb-6 flex flex-wrap gap-2">
+          <Link href="/" className="hover:text-slate-900">
+            Home
+          </Link>
+          <span>/</span>
+          <Link href="/products" className="hover:text-slate-900">
+            Products
+          </Link>
+          <span>/</span>
+          <span className="text-slate-900 font-medium">{product.name}</span>
+        </nav>
+
+        <ProductDetailsClient product={product} />
+
+        {related.length > 0 && (
+          <section className="pt-16">
+            <div className="flex flex-wrap justify-between items-end border-b border-slate-200 pb-4 mb-6 gap-3">
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 m-0">
+                Related Products
+              </h2>
+              <Link
+                href={`/products?category=${product.category?.slug || ''}`}
+                className="text-sm font-semibold text-[#1F06AC] hover:underline"
+              >
+                View category →
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 lg:gap-6">
+              {related.map((item) => (
+                <ProductCard key={item.id} product={item} />
+              ))}
+            </div>
+          </section>
+        )}
+      </main>
+
+      <StoreFooter />
+    </div>
+  );
+}
