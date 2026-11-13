@@ -29,7 +29,7 @@ export default async function HomePage() {
             </div>
 
             <h1 className="mt-4 font-catchye text-3xl sm:text-5xl lg:text-[54px] font-normal leading-[1.1] tracking-tight text-white m-0">
-              Everything your lab needs. Catalogued.
+              Tools for Exploration, Supplies for Discovery.
             </h1>
 
             <p className="mt-5 text-base sm:text-lg leading-relaxed text-[#DDE5FB] max-w-[540px]">
@@ -124,26 +124,19 @@ export default async function HomePage() {
       </section>
 
       {/* main content */}
-      <main className="max-w-[1240px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-14 flex flex-col gap-10 sm:gap-16 flex-1">
-        {/* category index section */}
+      <main className="max-w-[1240px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex flex-col gap-8 sm:gap-10 flex-1">
+        {/* compact category buttons */}
         <section>
-          <div className="flex items-center gap-3 mb-2">
-            <span className="sp-mono text-xs font-semibold tracking-widest text-[#0F42C0]">
-              INDEX
-            </span>
-            <span className="flex-1 h-px bg-[#D5DCF3]" />
-          </div>
-
-          <div className="flex flex-wrap justify-between items-baseline mb-4 sm:mb-6 gap-2">
-            <h2 className="font-catchye text-2xl sm:text-3xl lg:text-[34px] font-normal text-[#0E0B33] m-0">
+          <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
+            <h2 className="font-catchye text-xl sm:text-2xl font-normal text-[#0E0B33] m-0">
               Shop by category
             </h2>
             <span className="sp-mono text-xs text-[#4A4F78] uppercase">
-              {categories.length} Categories · {activeProducts.length} Specimens
+              {categories.length} Categories · {activeProducts.length} Items
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5 sm:gap-6">
+          <div className="flex flex-wrap gap-2.5">
             {categories.map((cat, idx) => {
               const count = activeProducts.filter((p) => p.category_id === cat.id).length;
               const code = cat.code || `0${idx + 1}`;
@@ -151,24 +144,14 @@ export default async function HomePage() {
                 <Link
                   key={cat.id}
                   href={`/products?category=${cat.slug}`}
-                  className="rounded-lg border border-[#D5DCF3] bg-white p-4 sm:p-6 flex items-center md:items-start justify-between gap-4 md:flex-col hover:border-[#0F42C0] hover:shadow-md transition-all group"
+                  className="inline-flex items-center gap-2.5 rounded-lg border border-[#D5DCF3] bg-white px-3.5 h-10 sm:h-11 text-sm font-semibold text-[#0E0B33] hover:border-[#0F42C0] hover:bg-[#EAEFFC]/40 transition-colors"
                 >
-                  <div className="flex items-center md:items-start gap-3.5 md:flex-col md:w-full md:justify-between">
-                    <span className="sp-mono w-12 h-12 sm:w-14 sm:h-14 rounded-lg sm:rounded-xl bg-[#1F06AC] text-[#E3EF4F] text-lg sm:text-xl font-bold flex items-center justify-center shrink-0">
-                      {code}
-                    </span>
-                    <div>
-                      <h3 className="font-catchye text-lg sm:text-xl font-normal text-[#0E0B33] leading-snug m-0">
-                        {cat.name}
-                      </h3>
-                      <div className="sp-mono text-[11px] sm:text-xs text-[#4A4F78] mt-1 uppercase">
-                        {count} {count === 1 ? 'Specimen' : 'Specimens'}
-                      </div>
-                    </div>
-                  </div>
-
-                  <span className="text-xs font-semibold text-[#0F42C0] sp-mono group-hover:translate-x-1 transition-transform shrink-0">
-                    BROWSE →
+                  <span className="sp-mono text-[11px] font-bold text-[#1F06AC] bg-[#E3EF4F] px-1.5 py-0.5 rounded">
+                    {code}
+                  </span>
+                  <span>{cat.name}</span>
+                  <span className="sp-mono text-[11px] text-[#4A4F78]">
+                    ({count})
                   </span>
                 </Link>
               );
