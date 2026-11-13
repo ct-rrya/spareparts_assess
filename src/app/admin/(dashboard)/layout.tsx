@@ -14,3 +14,4 @@ export default function AdminDashboardLayout({
 
   return <AdminShell storageMode={storageMode}>{children}</AdminShell>;
 }
+

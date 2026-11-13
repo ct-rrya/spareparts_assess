@@ -1,9 +1,17 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import localFont from 'next/font/local';
 import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import { NavigationProgress } from '@/components/NavigationProgress';
 import { NetworkStatusToast } from '@/components/NetworkStatusToast';
+
+// catchye display font from local file
+const catchye = localFont({
+  src: '../fonts/Catchye.otf',
+  variable: '--font-catchye',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Spare Parts — Laboratory & Science Supplies',
@@ -17,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={catchye.variable}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -30,7 +38,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="text-base antialiased">
+      <body className="text-base antialiased font-sans">
         <CartProvider>
           <Suspense fallback={null}>
             <NavigationProgress />

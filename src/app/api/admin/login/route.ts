@@ -12,7 +12,14 @@ export async function POST(req: NextRequest) {
     const password = String(body.password || '');
 
     const creds = getDemoCredentials();
-    if (email !== creds.email.toLowerCase() || password !== creds.password) {
+    // allow both standard demo email and screenshot email
+    const validEmails = [
+      creds.email.toLowerCase(),
+      'admin@spareparts.ph',
+      'admin@spareparts.demo',
+    ];
+
+    if (!validEmails.includes(email) || password !== creds.password) {
       return NextResponse.json(
         { error: 'Invalid demo admin credentials.' },
         { status: 401 }
@@ -32,4 +39,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Login failed.' }, { status: 400 });
   }
 }
-

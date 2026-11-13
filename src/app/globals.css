@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Catchye';
+  src: url('/fonts/Catchye.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-catchye {
+  font-family: var(--font-catchye), 'Catchye', Georgia, serif;
+}
+
 :root {
   --sp-primary: #1F06AC;
   --sp-blue: #0F42C0;
