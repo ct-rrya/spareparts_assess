@@ -1,10 +1,8 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Category, Product } from '@/types';
 import { ProductCard } from './ProductCard';
-import { Search } from 'lucide-react';
 
 interface ProductListingClientProps {
   initialProducts: Product[];
@@ -20,6 +18,11 @@ export function ProductListingClient({
   initialQuery = '',
 }: ProductListingClientProps) {
   const [search, setSearch] = useState(initialQuery);
+
+  // sync header search updates when already on /products
+  useEffect(() => {
+    setSearch(initialQuery);
+  }, [initialQuery]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>(() => {
     if (!initialCategorySlug) return [];
     const found = categories.find((c) => c.slug === initialCategorySlug);
@@ -77,43 +80,7 @@ export function ProductListingClient({
   }, [initialProducts, search, selectedCategories, minPrice, maxPrice, sortOrder]);
 
   return (
-    <div className="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
-      {/* breadcrumb */}
-      <div className="sp-mono text-xs font-semibold tracking-wider text-[#4A4F78] mb-4">
-        <Link href="/" className="text-[#0F42C0] hover:underline">
-          HOME
-        </Link>{' '}
-        / PRODUCTS
-      </div>
-
-      {/* header banner */}
-      <div className="flex flex-wrap justify-between items-end border-b border-[#D5DCF3] pb-6 mb-6 gap-4">
-        <div>
-          <h1 className="font-catchye text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[#0E0B33] m-0">
-            Products
-          </h1>
-          <div className="sp-mono text-xs text-[#4A4F78] mt-2 uppercase">
-            {initialProducts.length} Items · {categories.length} Categories
-          </div>
-        </div>
-
-        {/* search field */}
-        <div className="relative w-full sm:w-[320px]">
-          <input
-            type="search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search name or SKU №..."
-            aria-label="Filter products"
-            className="w-full h-11 sm:h-12 rounded-lg border border-[#C9D2F0] bg-white pl-10 pr-3.5 text-sm text-[#0E0B33] placeholder:text-[#4A4F78] focus:outline-none focus:border-[#1F06AC]"
-          />
-          <Search
-            size={16}
-            className="absolute left-3.5 top-3.5 text-[#4A4F78] pointer-events-none"
-          />
-        </div>
-      </div>
-
+    <div className="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 flex-1">
       {/* horizontal category pills for mobile matching mobile design board */}
       <nav
         aria-label="Categories"
