@@ -7,5 +7,5 @@ export const dynamic = 'force-dynamic';
 export default async function AdminOrdersPage() {
   const orders = await listOrders();
 
-  return <AdminOrdersClient initialOrders={orders} />;
+  return <AdminOrdersClient initialOrders={orders} nowMs={Date.now()} />;
 }

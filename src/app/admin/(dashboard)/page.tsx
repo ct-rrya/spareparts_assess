@@ -1,8 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
 import { getAdminOverviewStats } from '@/lib/db';
 import { formatPHP } from '@/lib/money';
-import { OrderStatus } from '@/types';
+import { OrderStatus, Product } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -53,6 +54,52 @@ function getStatusLabel(status: OrderStatus) {
   return status.toUpperCase();
 }
 
+function LowStockCard({
+  products,
+  className = '',
+}: {
+  products: Product[];
+  className?: string;
+}) {
+  return (
+    <div className={`flex-col rounded-[8px] border border-[#E2E4EC] bg-white ${className}`}>
+      <div className="border-b border-dashed border-[#E2E4EC] px-5 py-3.5">
+        <h2 className="sp-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[#5C6072]">
+          LOW STOCK
+        </h2>
+      </div>
+
+      {products.length === 0 ? (
+        <div className="flex flex-1 items-center justify-center p-6 text-center text-[13px] text-[#7D8292]">
+          All products are well stocked.
+        </div>
+      ) : (
+        <div className="divide-y divide-[#ECEEF4]">
+          {products.map((product) => (
+            <Link
+              key={product.id}
+              href={`/admin/products/${product.id}`}
+              className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-[#F9FAFC]"
+            >
+              <div className="min-w-0">
+                <p className="truncate text-[13.5px] font-semibold text-[#121212]">
+                  {product.name}
+                </p>
+                <p className="sp-mono mt-1 text-[10.5px] uppercase tracking-[0.05em] text-[#7D8292]">
+                  SKU {product.specimen_code}
+                </p>
+              </div>
+              <span className="sp-mono shrink-0 rounded-[4px] bg-[#FFF6C2] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.05em] text-[#5A4B00]">
+                {product.stock} LEFT
+              </span>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default async function AdminOverviewPage() {
   const stats = await getAdminOverviewStats();
   const maxDaySales = Math.max(
@@ -72,51 +119,51 @@ export default async function AdminOverviewPage() {
       </div>
 
       {/* kpi summary row */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="rounded-[8px] border border-[#E2E4EC] bg-white p-5">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <div className="rounded-[8px] border border-[#E2E4EC] bg-white p-4 sm:p-5">
           <p className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
             PRODUCTS
           </p>
-          <p className="mt-2.5 text-[30px] font-bold leading-none tracking-[-0.02em] text-[#121212]">
+          <p className="mt-2 sm:mt-2.5 text-2xl sm:text-[30px] font-bold leading-none tracking-[-0.02em] text-[#121212]">
             {stats.totalProducts}
           </p>
-          <p className="sp-mono mt-3 text-[10px] uppercase tracking-[0.06em] text-[#7D8292]">
+          <p className="sp-mono mt-2.5 sm:mt-3 text-[10px] uppercase tracking-[0.06em] text-[#7D8292]">
             {stats.totalCategories} CATEGORIES
           </p>
         </div>
 
-        <div className="rounded-[8px] border border-[#E2E4EC] bg-white p-5">
+        <div className="rounded-[8px] border border-[#E2E4EC] bg-white p-4 sm:p-5">
           <p className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
             ORDERS
           </p>
-          <p className="mt-2.5 text-[30px] font-bold leading-none tracking-[-0.02em] text-[#121212]">
+          <p className="mt-2 sm:mt-2.5 text-2xl sm:text-[30px] font-bold leading-none tracking-[-0.02em] text-[#121212]">
             {stats.totalOrders}
           </p>
-          <p className="sp-mono mt-3 text-[10px] uppercase tracking-[0.06em] text-[#7D8292]">
+          <p className="sp-mono mt-2.5 sm:mt-3 text-[10px] uppercase tracking-[0.06em] text-[#7D8292]">
             {stats.actionOrders} NEED ACTION
           </p>
         </div>
 
-        <div className="rounded-[8px] border border-[#E2E4EC] bg-white p-5">
+        <div className="rounded-[8px] border border-[#E2E4EC] bg-white p-4 sm:p-5">
           <p className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
             CUSTOMERS
           </p>
-          <p className="mt-2.5 text-[30px] font-bold leading-none tracking-[-0.02em] text-[#121212]">
+          <p className="mt-2 sm:mt-2.5 text-2xl sm:text-[30px] font-bold leading-none tracking-[-0.02em] text-[#121212]">
             {stats.totalCustomers}
           </p>
-          <p className="sp-mono mt-3 text-[10px] uppercase tracking-[0.06em] text-[#7D8292]">
+          <p className="sp-mono mt-2.5 sm:mt-3 text-[10px] uppercase tracking-[0.06em] text-[#7D8292]">
             FROM ORDERS
           </p>
         </div>
 
-        <div className="rounded-[8px] border border-[#1F06AC] bg-[#1F06AC] p-5 text-white">
+        <div className="rounded-[8px] border border-[#1F06AC] bg-[#1F06AC] p-4 sm:p-5 text-white">
           <p className="sp-mono text-[10px] uppercase tracking-[0.08em] text-white/75">
             SALES
           </p>
-          <p className="mt-2.5 text-[30px] font-bold leading-none tracking-[-0.02em] text-white">
+          <p className="mt-2 sm:mt-2.5 text-2xl sm:text-[30px] font-bold leading-none tracking-[-0.02em] text-white">
             {formatPHP(stats.monthlySales)}
           </p>
-          <p className="sp-mono mt-3 text-[10px] uppercase tracking-[0.06em] text-white/80">
+          <p className="sp-mono mt-2.5 sm:mt-3 text-[10px] uppercase tracking-[0.06em] text-white/80">
             THIS MONTH
           </p>
         </div>
@@ -125,14 +172,14 @@ export default async function AdminOverviewPage() {
       {/* sales chart + low stock row */}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-[1.45fr_1fr]">
         <div className="flex flex-col rounded-[8px] border border-[#E2E4EC] bg-white">
-          <div className="border-b border-dashed border-[#E2E4EC] px-5 py-3.5">
+          <div className="border-b border-dashed border-[#E2E4EC] px-4 sm:px-5 py-3.5">
             <h2 className="sp-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[#5C6072]">
               SALES · LAST 7 DAYS
             </h2>
           </div>
 
-          <div className="flex flex-1 flex-col justify-end px-6 pb-5 pt-8">
-            <div className="flex h-[200px] items-end justify-between gap-3 sm:gap-5">
+          <div className="flex flex-1 flex-col justify-end px-4 sm:px-6 pb-4 sm:pb-5 pt-5 sm:pt-8">
+            <div className="flex h-[160px] sm:h-[200px] items-end justify-between gap-2.5 sm:gap-5">
               {stats.last7DaysSales.map((day) => {
                 const isPeak = maxDaySales > 0 && day.total === maxDaySales;
                 const heightPct =
@@ -171,45 +218,69 @@ export default async function AdminOverviewPage() {
           </div>
         </div>
 
-        <div className="flex flex-col rounded-[8px] border border-[#E2E4EC] bg-white">
-          <div className="border-b border-dashed border-[#E2E4EC] px-5 py-3.5">
-            <h2 className="sp-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[#5C6072]">
-              LOW STOCK
-            </h2>
-          </div>
-
-          {stats.lowStockProducts.length === 0 ? (
-            <div className="flex flex-1 items-center justify-center p-6 text-center text-[13px] text-[#7D8292]">
-              All products are well stocked.
-            </div>
-          ) : (
-            <div className="divide-y divide-[#ECEEF4]">
-              {stats.lowStockProducts.map((product) => (
-                <Link
-                  key={product.id}
-                  href={`/admin/products/${product.id}`}
-                  className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-[#F9FAFC]"
-                >
-                  <div className="min-w-0">
-                    <p className="truncate text-[13.5px] font-semibold text-[#121212]">
-                      {product.name}
-                    </p>
-                    <p className="sp-mono mt-1 text-[10.5px] uppercase tracking-[0.05em] text-[#7D8292]">
-                      SKU {product.specimen_code}
-                    </p>
-                  </div>
-                  <span className="sp-mono shrink-0 rounded-[4px] bg-[#FFF6C2] px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.05em] text-[#5A4B00]">
-                    {product.stock} LEFT
-                  </span>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
+        <LowStockCard products={stats.lowStockProducts} className="hidden lg:flex" />
       </div>
 
-      {/* recent orders table */}
-      <div className="overflow-hidden rounded-[8px] border border-[#E2E4EC] bg-white">
+      {/* mobile recent orders card list */}
+      <div className="md:hidden space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="sp-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[#5C6072]">
+            RECENT ORDERS
+          </h2>
+          <Link
+            href="/admin/orders"
+            className="sp-mono text-[11px] font-medium uppercase tracking-[0.06em] text-[#1C47CC] hover:underline"
+          >
+            VIEW ALL →
+          </Link>
+        </div>
+
+        {stats.recentOrders.length === 0 ? (
+          <div className="rounded-[8px] border border-[#E2E4EC] bg-white p-6 text-center text-sm text-[#7D8292]">
+            No orders placed yet.
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2.5">
+            {stats.recentOrders.map((order) => (
+              <Link
+                key={order.id}
+                href={`/admin/orders/${order.id}`}
+                className="rounded-[8px] border border-[#E2E4EC] bg-white p-4 flex flex-col gap-1.5 transition-colors hover:bg-[#F9FAFC]"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="sp-mono text-xs font-semibold text-[#1F06AC]">
+                    {order.order_number}
+                  </span>
+                  <span
+                    className={`sp-mono rounded-[4px] px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.05em] ${getStatusBadgeClass(
+                      order.status
+                    )}`}
+                  >
+                    {getStatusLabel(order.status)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[15px] font-semibold text-[#121212] truncate">
+                    {order.customer_name}
+                  </span>
+                  <ChevronRight size={15} className="text-[#1C47CC] shrink-0" />
+                </div>
+                <div className="flex items-center justify-between gap-2 pt-0.5">
+                  <span className="sp-mono text-[11px] text-[#7D8292]">
+                    {formatShortDate(order.created_at)}
+                  </span>
+                  <span className="text-sm font-bold text-[#121212]">
+                    {formatPHP(order.total)}
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* desktop recent orders table */}
+      <div className="hidden md:block overflow-hidden rounded-[8px] border border-[#E2E4EC] bg-white">
         <div className="flex items-center justify-between px-5 py-3.5">
           <h2 className="sp-mono text-[11px] font-medium uppercase tracking-[0.08em] text-[#5C6072]">
             RECENT ORDERS
@@ -292,6 +363,8 @@ export default async function AdminOverviewPage() {
           </div>
         )}
       </div>
+
+      <LowStockCard products={stats.lowStockProducts} className="flex lg:hidden" />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import './globals.css';
 import { CartProvider } from '@/context/CartContext';
 import { NavigationProgress } from '@/components/NavigationProgress';
 import { NetworkStatusToast } from '@/components/NetworkStatusToast';
+import { AdminShortcut } from '@/components/AdminShortcut';
 
 // catchye display font from local file
 const catchye = localFont({
@@ -17,6 +18,9 @@ export const metadata: Metadata = {
   title: 'Spare Parts — Laboratory & Science Supplies',
   description:
     'Anatomy models, lab essentials and study tools, catalogued and ready to order for CubeTech.',
+  icons: {
+    icon: '/images/favicon.svg',
+  },
 };
 
 export default function RootLayout({
@@ -44,6 +48,7 @@ export default function RootLayout({
             <NavigationProgress />
           </Suspense>
           <NetworkStatusToast />
+          <AdminShortcut />
           {children}
         </CartProvider>
       </body>

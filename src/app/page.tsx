@@ -124,19 +124,41 @@ export default async function HomePage() {
       </section>
 
       {/* main content */}
-      <main className="max-w-[1240px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex flex-col gap-8 sm:gap-10 flex-1">
-        {/* compact category buttons */}
+      <main className="max-w-[1240px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 flex flex-col gap-8 sm:gap-10 flex-1">
+        {/* mobile quick search */}
+        <form action="/products" method="get" className="md:hidden">
+          <div className="relative">
+            <input
+              type="search"
+              name="q"
+              placeholder="Search name or SKU №"
+              aria-label="Search products"
+              className="w-full h-11 rounded-lg border border-[#D5DCF3] bg-white pl-10 pr-4 text-sm text-[#0E0B33] placeholder:text-[#7D8292] focus:outline-none focus:border-[#1F06AC]"
+            />
+            <span className="absolute left-3.5 top-3.5 text-[#7D8292] pointer-events-none text-sm">
+              ⌕
+            </span>
+          </div>
+        </form>
+
+        {/* category links (stacked cards on mobile, compact pills on desktop) */}
         <section>
+          <div className="flex items-center gap-3 mb-2 sm:hidden">
+            <span className="sp-mono text-[11px] font-semibold tracking-widest text-[#4A4F78]">
+              INDEX
+            </span>
+            <span className="flex-1 h-px bg-[#D5DCF3]" />
+          </div>
           <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
-            <h2 className="font-catchye text-xl sm:text-2xl font-normal text-[#0E0B33] m-0">
+            <h2 className="font-catchye text-2xl sm:text-2xl font-normal text-[#0E0B33] m-0">
               Shop by category
             </h2>
-            <span className="sp-mono text-xs text-[#4A4F78] uppercase">
+            <span className="hidden sm:inline sp-mono text-xs text-[#4A4F78] uppercase">
               {categories.length} Categories · {activeProducts.length} Items
             </span>
           </div>
 
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2.5">
             {categories.map((cat, idx) => {
               const count = activeProducts.filter((p) => p.category_id === cat.id).length;
               const code = cat.code || `0${idx + 1}`;
@@ -144,14 +166,26 @@ export default async function HomePage() {
                 <Link
                   key={cat.id}
                   href={`/products?category=${cat.slug}`}
-                  className="inline-flex items-center gap-2.5 rounded-lg border border-[#D5DCF3] bg-white px-3.5 h-10 sm:h-11 text-sm font-semibold text-[#0E0B33] hover:border-[#0F42C0] hover:bg-[#EAEFFC]/40 transition-colors"
+                  className="flex sm:inline-flex items-center justify-between sm:justify-start gap-3 sm:gap-2.5 rounded-lg border border-[#D5DCF3] bg-white p-3 sm:px-3.5 sm:py-0 sm:h-11 text-sm font-semibold text-[#0E0B33] hover:border-[#0F42C0] hover:bg-[#EAEFFC]/40 transition-colors"
                 >
-                  <span className="sp-mono text-[11px] font-bold text-[#1F06AC] bg-[#E3EF4F] px-1.5 py-0.5 rounded">
-                    {code}
-                  </span>
-                  <span>{cat.name}</span>
-                  <span className="sp-mono text-[11px] text-[#4A4F78]">
+                  <div className="flex items-center gap-3 sm:gap-2.5 min-w-0">
+                    <span className="sp-mono inline-flex h-9 w-9 sm:h-auto sm:w-auto items-center justify-center rounded-[6px] sm:rounded bg-[#1F06AC] sm:bg-[#E3EF4F] text-xs sm:text-[11px] font-bold text-white sm:text-[#1F06AC] sm:px-1.5 sm:py-0.5 shrink-0">
+                      {code}
+                    </span>
+                    <div className="min-w-0">
+                      <div className="truncate font-semibold text-[#0E0B33]">
+                        {cat.name}
+                      </div>
+                      <div className="sp-mono text-[10.5px] font-normal uppercase tracking-[0.06em] text-[#7D8292] sm:hidden">
+                        {String(count).padStart(2, '0')} ITEMS
+                      </div>
+                    </div>
+                  </div>
+                  <span className="hidden sm:inline sp-mono text-[11px] text-[#4A4F78]">
                     ({count})
+                  </span>
+                  <span className="sp-mono text-xs text-[#0F42C0] sm:hidden">
+                    →
                   </span>
                 </Link>
               );

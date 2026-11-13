@@ -10,6 +10,8 @@
 
 .font-catchye {
   font-family: var(--font-catchye), 'Catchye', Georgia, serif;
+  letter-spacing: 0.03em;
+  word-spacing: 0.05em;
 }
 
 :root {

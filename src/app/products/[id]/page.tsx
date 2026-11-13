@@ -9,6 +9,7 @@ import { StoreHeader } from '@/components/store/StoreHeader';
 import { StoreFooter } from '@/components/store/StoreFooter';
 import { ProductDetailsClient } from '@/components/store/ProductDetailsClient';
 import { ProductCard } from '@/components/store/ProductCard';
+import { BackButton } from '@/components/store/BackButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -63,17 +64,9 @@ export default async function ProductDetailsPage({
       <StoreHeader categories={categories} />
 
       <main className="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-5 pb-12 flex-1">
-        <nav className="text-xs sm:text-sm text-slate-500 mb-4 flex flex-wrap gap-2">
-          <Link href="/" className="hover:text-slate-900">
-            Home
-          </Link>
-          <span>/</span>
-          <Link href="/products" className="hover:text-slate-900">
-            Products
-          </Link>
-          <span>/</span>
-          <span className="text-slate-900 font-medium">{product.name}</span>
-        </nav>
+        <div className="mb-4">
+          <BackButton fallbackHref="/products" />
+        </div>
 
         <ProductDetailsClient product={product} />
 

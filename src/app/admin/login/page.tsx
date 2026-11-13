@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Monitor } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState('admin@spareparts.ph');
@@ -36,37 +36,27 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <div className="min-h-screen w-full flex flex-col lg:flex-row bg-white">
-      {/* left blue blueprint banner */}
-      <div className="w-full lg:w-1/2 bg-blueprint-grid min-h-[460px] lg:min-h-screen p-8 sm:p-12 lg:p-16 flex flex-col justify-between text-white relative">
+    <div className="min-h-screen w-full flex flex-col justify-center bg-blueprint-grid px-5 py-8 lg:p-0 lg:flex-row lg:justify-start lg:bg-none lg:bg-white">
+      {/* desktop left blue blueprint banner */}
+      <div className="hidden lg:flex w-1/2 bg-blueprint-grid min-h-screen p-12 xl:p-16 flex-col justify-between text-white relative">
         {/* brand logo */}
         <div className="flex items-center gap-3">
-          <span className="w-10 h-10 rounded-xl bg-[#E3EF4F] flex items-center justify-center shadow-sm shrink-0">
-            <svg
-              aria-hidden="true"
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#1F06AC"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M8 3h8M9 3v6l-4.5 9A2 2 0 006.3 21h11.4a2 2 0 001.8-3L15 9V3M7.5 15h9" />
-            </svg>
-          </span>
-          <span className="font-catchye text-2xl sm:text-3xl tracking-wide text-white select-none">
+          <img
+            src="/images/favicon.svg"
+            alt="SpareParts"
+            className="h-10 w-10 object-contain shrink-0"
+          />
+          <span className="font-catchye text-3xl tracking-wide text-white select-none">
             SpareParts
           </span>
         </div>
 
         {/* main display header with catchye font */}
-        <div className="my-auto py-10 lg:py-16">
-          <div className="sp-mono text-[11px] sm:text-xs font-bold tracking-[0.18em] text-[#E3EF4F] uppercase mb-4">
+        <div className="my-auto py-16">
+          <div className="sp-mono text-xs font-bold tracking-[0.18em] text-[#E3EF4F] uppercase mb-4">
             STORE ADMINISTRATION
           </div>
-          <h1 className="font-catchye text-4xl sm:text-5xl lg:text-[56px] font-normal leading-[1.12] text-white tracking-tight m-0 max-w-lg">
+          <h1 className="font-catchye text-[56px] font-normal leading-[1.12] text-white tracking-tight m-0 max-w-lg">
             Catalog, orders<br />
             and customers in<br />
             one place.
@@ -79,18 +69,46 @@ export default function AdminLoginPage() {
         </div>
       </div>
 
-      {/* right sign in form */}
-      <div className="w-full lg:w-1/2 min-h-[520px] lg:min-h-screen bg-white flex items-center justify-center p-6 sm:p-12 lg:p-16">
-        <div className="w-full max-w-[420px] flex flex-col">
-          <h2 className="font-catchye text-4xl sm:text-[44px] font-normal text-[#0E0B33] tracking-tight m-0 mb-2">
+      {/* mobile brand header */}
+      <div className="flex lg:hidden flex-col gap-1.5 w-full max-w-[420px] mx-auto mb-5 text-white">
+        <div className="flex items-center gap-2.5">
+          <img
+            src="/images/favicon.svg"
+            alt="SpareParts"
+            className="h-8 w-8 object-contain shrink-0"
+          />
+          <span className="font-catchye text-2xl tracking-wide text-white select-none">
+            SpareParts
+          </span>
+        </div>
+        <div className="sp-mono text-[11px] font-bold tracking-[0.18em] text-[#E3EF4F] uppercase">
+          STORE ADMINISTRATION
+        </div>
+      </div>
+
+      {/* sign in form (card on mobile, right panel on desktop) */}
+      <div className="w-full lg:w-1/2 lg:min-h-screen lg:bg-white flex items-center justify-center lg:p-16">
+        <div className="w-full max-w-[420px] rounded-2xl bg-white p-6 shadow-xl lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none flex flex-col">
+          <h2 className="font-catchye text-3xl sm:text-[44px] font-normal text-[#0E0B33] tracking-tight m-0 mb-1.5 sm:mb-2">
             Sign in
           </h2>
-          <p className="text-sm sm:text-[15px] text-[#4A4F78] m-0 mb-6 leading-relaxed">
+          <p className="text-xs sm:text-[15px] text-[#4A4F78] m-0 mb-4 sm:mb-6 leading-relaxed">
             Manage products, orders and customers.
           </p>
 
+          {/* mobile desktop-recommended warning */}
+          <div
+            role="status"
+            className="md:hidden rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-xs text-amber-950 mb-4 flex items-start gap-2 leading-snug"
+          >
+            <Monitor size={15} className="text-amber-700 shrink-0 mt-0.5" />
+            <span>
+              <strong>Desktop recommended:</strong> Admin dashboard is best experienced on desktop.
+            </span>
+          </div>
+
           {/* demo credentials notice */}
-          <div className="rounded-lg bg-[#F6F7FB] border border-[#D5DCF3] p-3.5 text-xs text-[#4A4F78] mb-6 leading-relaxed">
+          <div className="hidden sm:block rounded-lg bg-[#F6F7FB] border border-[#D5DCF3] p-3.5 text-xs text-[#4A4F78] mb-6 leading-relaxed">
             <span className="sp-mono font-bold text-[#0F42C0] block mb-1">
               DEMO CREDENTIALS
             </span>

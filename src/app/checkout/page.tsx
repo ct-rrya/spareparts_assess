@@ -10,6 +10,12 @@ import { StoreHeader } from '@/components/store/StoreHeader';
 import { StoreFooter } from '@/components/store/StoreFooter';
 import { Loader2 } from 'lucide-react';
 
+const PAYMENT_LABELS: Record<PaymentMethod, string> = {
+  'Cash on Delivery': 'Cash on delivery',
+  'E-Wallet': 'GCash / e-wallet',
+  'Bank Transfer': 'Bank transfer',
+};
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, subtotal, total, hydrated, clearCart, syncItemStock } =
@@ -18,7 +24,13 @@ export default function CheckoutPage() {
   const [customerName, setCustomerName] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
   const [contactNumber, setContactNumber] = useState('');
-  const [deliveryAddress, setDeliveryAddress] = useState('');
+
+  const [street, setStreet] = useState('');
+  const [barangay, setBarangay] = useState('');
+  const [city, setCity] = useState('');
+  const [province, setProvince] = useState('');
+  const [postalCode, setPostalCode] = useState('');
+
   const [paymentMethod, setPaymentMethod] =
     useState<PaymentMethod>('Cash on Delivery');
   const [orderNotes, setOrderNotes] = useState('');
@@ -54,7 +66,7 @@ export default function CheckoutPage() {
     setErrorMsg(null);
 
     if (!customerName.trim()) {
-      setErrorMsg('Customer name is required.');
+      setErrorMsg('Full name is required.');
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail.trim())) {
@@ -62,11 +74,17 @@ export default function CheckoutPage() {
       return;
     }
     if (!/\d{5,}/.test(contactNumber.replace(/\D/g, ''))) {
-      setErrorMsg('Please enter a valid contact number.');
+      setErrorMsg('Please enter a valid mobile number.');
       return;
     }
-    if (!deliveryAddress.trim()) {
-      setErrorMsg('Delivery address is required.');
+
+    const combinedAddress = [street, barangay, city, province, postalCode]
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .join(', ');
+
+    if (!street.trim() || !city.trim()) {
+      setErrorMsg('Street address and city / municipality are required.');
       return;
     }
     if (items.length === 0) {
@@ -83,7 +101,7 @@ export default function CheckoutPage() {
           customer_name: customerName.trim(),
           customer_email: customerEmail.trim(),
           contact_number: contactNumber.trim(),
-          delivery_address: deliveryAddress.trim(),
+          delivery_address: combinedAddress,
           payment_method: paymentMethod,
           order_notes: orderNotes.trim(),
           items: items.map((i) => ({
@@ -116,45 +134,55 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F6F7FB] text-[#0E0B33]">
+    <div className="flex min-h-screen flex-col bg-[#F6F7FB] text-[#121212]">
       <StoreHeader />
 
-      <main className="max-w-[1040px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex-1">
-        {/* checkout progress stepper matching mobile design board */}
-        <div className="flex justify-center items-center gap-2 sm:gap-3 py-3 px-4 bg-white border border-[#D5DCF3] rounded-lg mb-6 sp-mono text-[11px] sm:text-xs tracking-wider">
-          <Link href="/cart" className="text-[#4A4F78] hover:text-[#0F42C0]">
+      <main className="mx-auto w-full max-w-[1160px] flex-1 px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
+        {/* step breadcrumb */}
+        <div className="sp-mono mb-4 flex items-center gap-2 text-[11px] uppercase tracking-[0.08em] text-[#7D8292]">
+          <Link href="/cart" className="hover:text-[#1F06AC]">
             CART
           </Link>
-          <span className="text-[#5882E8]">›</span>
-          <span className="text-[#1F06AC] font-bold border-b-2 border-[#E3EF4F] pb-0.5">
+          <span>›</span>
+          <span className="border-b-2 border-[#E5F24E] pb-0.5 font-semibold text-[#1F06AC]">
             CHECKOUT
           </span>
-          <span className="text-[#5882E8]">›</span>
-          <span className="text-[#4A4F78]">CONFIRMED</span>
+          <span>›</span>
+          <span>CONFIRMED</span>
         </div>
 
-        <div className="border-b border-[#D5DCF3] pb-4 mb-6 sm:mb-8">
-          <h1 className="font-catchye text-4xl sm:text-5xl font-normal tracking-tight text-[#0E0B33] m-0">
+        {/* header */}
+        <div className="mb-7">
+          <h1 className="font-catchye m-0 text-[40px] leading-none tracking-[-0.01em] text-[#121212] sm:text-[44px]">
             Checkout
           </h1>
-          <div className="sp-mono text-xs text-[#4A4F78] mt-1.5 uppercase">
-            {items.length} {items.length === 1 ? 'Specimen' : 'Specimens'} · Total {formatPHP(total)}
-          </div>
         </div>
 
         {!hydrated ? (
-          <div className="rounded-lg border border-[#D5DCF3] bg-white p-12 flex justify-center items-center">
-            <Loader2 className="h-6 w-6 text-[#0F42C0] animate-spin" />
+          <div className="flex items-center justify-center rounded-[8px] border border-[#E2E4EC] bg-white p-12">
+            <Loader2 className="h-6 w-6 animate-spin text-[#1F06AC]" />
+          </div>
+        ) : submitting ? (
+          <div className="flex flex-col items-center justify-center gap-3 rounded-[8px] border border-[#E2E4EC] bg-white p-14 text-center">
+            <Loader2 className="h-8 w-8 animate-spin text-[#1F06AC]" />
+            <div className="font-catchye text-3xl text-[#121212]">
+              Processing your order
+            </div>
+            <p className="sp-mono m-0 text-[11px] uppercase tracking-[0.08em] text-[#7D8292]">
+              CONFIRMING STOCK &amp; PREPARING YOUR RECEIPT...
+            </p>
           </div>
         ) : items.length === 0 ? (
-          <div className="rounded-lg border border-[#D5DCF3] bg-white p-12 text-center flex flex-col items-center gap-3">
-            <div className="font-catchye text-2xl sm:text-3xl font-normal text-[#0E0B33]">Your cart is empty</div>
-            <p className="text-base text-[#4A4F78] m-0">
+          <div className="flex flex-col items-center gap-3 rounded-[8px] border border-[#E2E4EC] bg-white p-12 text-center">
+            <div className="font-catchye text-3xl text-[#121212]">
+              Your cart is empty
+            </div>
+            <p className="m-0 text-sm text-[#5C6072]">
               You cannot check out with an empty cart.
             </p>
             <Link
               href="/products"
-              className="mt-2 rounded-lg bg-[#0F42C0] hover:bg-[#1F06AC] text-white px-7 h-12 inline-flex items-center text-base font-bold transition-colors cursor-pointer"
+              className="mt-2 inline-flex h-11 cursor-pointer items-center rounded-[6px] bg-[#0F42C0] px-6 text-sm font-semibold text-white transition-colors hover:bg-[#1F06AC]"
             >
               Browse Products
             </Link>
@@ -162,206 +190,294 @@ export default function CheckoutPage() {
         ) : (
           <form
             onSubmit={handleSubmit}
-            className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 items-start"
+            className="grid grid-cols-1 items-start gap-7 lg:grid-cols-[1.6fr_1fr]"
           >
-            <div className="flex flex-col gap-6">
+            {/* left form sections */}
+            <div className="space-y-6">
               {errorMsg && (
-                <div
-                  role="alert"
-                  className="rounded-lg border border-red-200 bg-red-50 text-red-900 p-4 text-sm font-medium"
-                >
+                <div className="rounded-[8px] border border-[#FECACA] bg-[#FEF2F2] px-4 py-3 text-sm font-medium text-[#991B1B]">
                   {errorMsg}
                 </div>
               )}
 
-              {/* customer info card */}
-              <div className="rounded-lg border border-[#D5DCF3] bg-white p-5 sm:p-6 flex flex-col gap-4 shadow-sm">
-                <div className="flex items-center gap-2.5 pb-2.5 border-b border-dashed border-[#D5DCF3]">
-                  <span className="w-7 h-7 rounded bg-[#1F06AC] text-[#E3EF4F] flex items-center justify-center sp-mono text-xs font-bold shrink-0">
+              {/* 01 contact */}
+              <section className="overflow-hidden rounded-[8px] border border-[#E2E4EC] bg-white">
+                <div className="flex items-center gap-2.5 border-b border-dashed border-[#E2E4EC] px-5 py-3.5">
+                  <span className="sp-mono flex h-6 w-6 items-center justify-center rounded-[4px] bg-[#1F06AC] text-[11px] font-semibold text-white">
                     01
                   </span>
-                  <span className="sp-mono text-xs font-semibold tracking-wider text-[#0E0B33]">
-                    CONTACT &amp; DELIVERY
-                  </span>
+                  <h2 className="sp-mono m-0 text-[11px] font-medium uppercase tracking-[0.08em] text-[#5C6072]">
+                    CONTACT
+                  </h2>
                 </div>
 
-                <label className="flex flex-col gap-1.5">
-                  <span className="text-sm font-semibold text-[#0E0B33]">
-                    Customer Name *
-                  </span>
-                  <input
-                    type="text"
-                    required
-                    value={customerName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                    placeholder="Juan Dela Cruz"
-                    className="rounded-lg border border-[#C9D2F0] px-3.5 h-12 text-base bg-white text-[#0E0B33] focus:outline-none focus:border-[#1F06AC]"
-                  />
-                </label>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-4 p-5">
                   <label className="flex flex-col gap-1.5">
-                    <span className="text-sm font-semibold text-[#0E0B33]">
-                      Email Address *
+                    <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
+                      FULL NAME
                     </span>
                     <input
-                      type="email"
+                      type="text"
                       required
-                      value={customerEmail}
-                      onChange={(e) => setCustomerEmail(e.target.value)}
-                      placeholder="juan@example.com"
-                      className="rounded-lg border border-[#C9D2F0] px-3.5 h-12 text-base bg-white text-[#0E0B33] focus:outline-none focus:border-[#1F06AC]"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      className="h-10 rounded-[6px] border border-[#E2E4EC] px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
                     />
                   </label>
 
-                  <label className="flex flex-col gap-1.5">
-                    <span className="text-sm font-semibold text-[#0E0B33]">
-                      Contact Number *
-                    </span>
-                    <input
-                      type="tel"
-                      required
-                      value={contactNumber}
-                      onChange={(e) => setContactNumber(e.target.value)}
-                      placeholder="+63 917 555 0199"
-                      className="rounded-lg border border-[#C9D2F0] px-3.5 h-12 text-base bg-white text-[#0E0B33] focus:outline-none focus:border-[#1F06AC]"
-                    />
-                  </label>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <label className="flex flex-col gap-1.5">
+                      <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
+                        EMAIL
+                      </span>
+                      <input
+                        type="email"
+                        required
+                        value={customerEmail}
+                        onChange={(e) => setCustomerEmail(e.target.value)}
+                        className="h-10 rounded-[6px] border border-[#E2E4EC] px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
+                      />
+                    </label>
+
+                    <label className="flex flex-col gap-1.5">
+                      <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
+                        MOBILE NUMBER
+                      </span>
+                      <input
+                        type="tel"
+                        required
+                        value={contactNumber}
+                        onChange={(e) => setContactNumber(e.target.value)}
+                        className="h-10 rounded-[6px] border border-[#E2E4EC] px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
+                      />
+                    </label>
+                  </div>
                 </div>
+              </section>
 
-                <label className="flex flex-col gap-1.5">
-                  <span className="text-sm font-semibold text-[#0E0B33]">
-                    Delivery Address *
-                  </span>
-                  <textarea
-                    required
-                    rows={3}
-                    value={deliveryAddress}
-                    onChange={(e) => setDeliveryAddress(e.target.value)}
-                    placeholder="Room/Dept, Street, Barangay, City, Province"
-                    className="rounded-lg border border-[#C9D2F0] p-3 text-base bg-white text-[#0E0B33] focus:outline-none focus:border-[#1F06AC]"
-                  />
-                </label>
-              </div>
-
-              {/* payment & notes card */}
-              <div className="rounded-lg border border-[#D5DCF3] bg-white p-5 sm:p-6 flex flex-col gap-4 shadow-sm">
-                <div className="flex items-center gap-2.5 pb-2.5 border-b border-dashed border-[#D5DCF3]">
-                  <span className="w-7 h-7 rounded bg-[#1F06AC] text-[#E3EF4F] flex items-center justify-center sp-mono text-xs font-bold shrink-0">
+              {/* 02 delivery address */}
+              <section className="overflow-hidden rounded-[8px] border border-[#E2E4EC] bg-white">
+                <div className="flex items-center gap-2.5 border-b border-dashed border-[#E2E4EC] px-5 py-3.5">
+                  <span className="sp-mono flex h-6 w-6 items-center justify-center rounded-[4px] bg-[#1F06AC] text-[11px] font-semibold text-white">
                     02
                   </span>
-                  <span className="sp-mono text-xs font-semibold tracking-wider text-[#0E0B33]">
-                    PAYMENT METHOD
-                  </span>
+                  <h2 className="sp-mono m-0 text-[11px] font-medium uppercase tracking-[0.08em] text-[#5C6072]">
+                    DELIVERY ADDRESS
+                  </h2>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <div className="space-y-4 p-5">
+                  <label className="flex flex-col gap-1.5">
+                    <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
+                      STREET / BUILDING / UNIT
+                    </span>
+                    <input
+                      type="text"
+                      required
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
+                      className="h-10 rounded-[6px] border border-[#E2E4EC] px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
+                    />
+                  </label>
+
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <label className="flex flex-col gap-1.5">
+                      <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
+                        BARANGAY
+                      </span>
+                      <input
+                        type="text"
+                        value={barangay}
+                        onChange={(e) => setBarangay(e.target.value)}
+                        className="h-10 rounded-[6px] border border-[#E2E4EC] px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
+                      />
+                    </label>
+
+                    <label className="flex flex-col gap-1.5">
+                      <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
+                        CITY / MUNICIPALITY
+                      </span>
+                      <input
+                        type="text"
+                        required
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="h-10 rounded-[6px] border border-[#E2E4EC] px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
+                      />
+                    </label>
+
+                    <label className="flex flex-col gap-1.5">
+                      <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
+                        PROVINCE
+                      </span>
+                      <input
+                        type="text"
+                        value={province}
+                        onChange={(e) => setProvince(e.target.value)}
+                        className="h-10 rounded-[6px] border border-[#E2E4EC] px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
+                      />
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-[1fr_2fr]">
+                    <label className="flex flex-col gap-1.5">
+                      <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
+                        POSTAL CODE
+                      </span>
+                      <input
+                        type="text"
+                        value={postalCode}
+                        onChange={(e) => setPostalCode(e.target.value)}
+                        className="h-10 rounded-[6px] border border-[#E2E4EC] px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
+                      />
+                    </label>
+
+                    <label className="flex flex-col gap-1.5">
+                      <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
+                        DELIVERY NOTES (OPTIONAL)
+                      </span>
+                      <input
+                        type="text"
+                        value={orderNotes}
+                        onChange={(e) => setOrderNotes(e.target.value)}
+                        className="h-10 rounded-[6px] border border-[#E2E4EC] px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
+                      />
+                    </label>
+                  </div>
+                </div>
+              </section>
+
+              {/* 03 payment method */}
+              <section className="overflow-hidden rounded-[8px] border border-[#E2E4EC] bg-white">
+                <div className="flex items-center gap-2.5 border-b border-dashed border-[#E2E4EC] px-5 py-3.5">
+                  <span className="sp-mono flex h-6 w-6 items-center justify-center rounded-[4px] bg-[#1F06AC] text-[11px] font-semibold text-white">
+                    03
+                  </span>
+                  <h2 className="sp-mono m-0 text-[11px] font-medium uppercase tracking-[0.08em] text-[#5C6072]">
+                    PAYMENT METHOD
+                  </h2>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 p-5 sm:grid-cols-2">
                   {PAYMENT_METHODS.map((method) => {
-                    const checked = paymentMethod === method;
+                    const active = paymentMethod === method;
                     return (
                       <label
                         key={method}
-                        className={`flex flex-col gap-1 rounded-lg border p-3.5 cursor-pointer transition-colors ${
-                          checked
-                            ? 'border-2 border-[#0F42C0] bg-[#EAEFFC]'
-                            : 'border-[#D5DCF3] hover:bg-slate-50'
+                        className={`flex cursor-pointer items-center gap-3 rounded-[6px] border px-4 py-3 text-sm transition-colors ${
+                          active
+                            ? 'border-[#1F06AC] bg-[#F4F6FF] font-semibold text-[#121212]'
+                            : 'border-[#E2E4EC] bg-white font-medium text-[#121212] hover:border-[#C9D2F0]'
                         }`}
                       >
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="radio"
-                            name="paymentMethod"
-                            value={method}
-                            checked={checked}
-                            onChange={() => setPaymentMethod(method)}
-                            className="w-4 h-4 accent-[#0F42C0]"
-                          />
-                          <span className="font-bold text-sm text-[#0E0B33]">
-                            {method}
-                          </span>
-                        </div>
-                        <span className="text-xs text-[#4A4F78] pl-6">
-                          {method === 'Cash on Delivery'
-                            ? 'Pay upon delivery'
-                            : method === 'E-Wallet'
-                              ? 'GCash / Maya (Demo)'
-                              : 'BDO / BPI (Demo)'}
-                        </span>
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value={method}
+                          checked={active}
+                          onChange={() => setPaymentMethod(method)}
+                          className="h-4 w-4 accent-[#1F06AC]"
+                        />
+                        <span>{PAYMENT_LABELS[method]}</span>
                       </label>
                     );
                   })}
                 </div>
-
-                <label className="flex flex-col gap-1.5 mt-2">
-                  <span className="text-sm font-semibold text-[#0E0B33]">
-                    Order Notes (Optional)
-                  </span>
-                  <input
-                    type="text"
-                    value={orderNotes}
-                    onChange={(e) => setOrderNotes(e.target.value)}
-                    placeholder="e.g. Leave with science department receptionist"
-                    className="rounded-lg border border-[#C9D2F0] px-3.5 h-12 text-base bg-white text-[#0E0B33] focus:outline-none focus:border-[#1F06AC]"
-                  />
-                </label>
-              </div>
+              </section>
             </div>
 
-            {/* order review sidebar */}
-            <div className="rounded-lg border border-[#D5DCF3] bg-white p-6 flex flex-col gap-4 shadow-sm lg:sticky lg:top-24">
-              <div className="sp-mono text-xs font-semibold tracking-wider text-[#4A4F78] pb-2 border-b border-dashed border-[#D5DCF3]">
-                REVIEW ITEMS ({items.length})
-              </div>
-
-              <div className="flex flex-col divide-y divide-[#EEF1FB] max-h-[300px] overflow-y-auto">
-                {items.map((item) => (
-                  <div
-                    key={item.productId}
-                    className="py-3 flex justify-between items-center text-sm gap-3"
-                  >
-                    <div>
-                      <div className="font-bold text-[#0E0B33] line-clamp-1">
-                        {item.name}
-                      </div>
-                      <div className="sp-mono text-xs text-[#4A4F78]">
-                        Qty: {item.quantity} × {formatPHP(item.unitPrice)}
-                      </div>
-                    </div>
-                    <div className="font-bold text-base text-[#1F06AC] shrink-0">
-                      {formatPHP(calcLineTotal(item.unitPrice, item.quantity))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="flex justify-between border-t border-[#D5DCF3] pt-3 text-sm text-[#4A4F78]">
-                <span>Subtotal</span>
-                <span className="font-semibold text-[#0E0B33]">{formatPHP(subtotal)}</span>
-              </div>
-
-              <div className="flex justify-between border-t border-[#EEF1FB] pt-3 text-xl font-bold text-[#0E0B33] items-baseline">
-                <span>Total</span>
-                <span className="text-2xl font-bold text-[#1F06AC]">
-                  {formatPHP(total)}
+            {/* 04 order summary */}
+            <aside className="overflow-hidden rounded-[8px] border border-[#E2E4EC] bg-white lg:sticky lg:top-24">
+              <div className="flex items-center gap-2.5 border-b border-dashed border-[#E2E4EC] px-5 py-3.5">
+                <span className="sp-mono flex h-6 w-6 items-center justify-center rounded-[4px] bg-[#1F06AC] text-[11px] font-semibold text-white">
+                  04
                 </span>
+                <h2 className="sp-mono m-0 text-[11px] font-medium uppercase tracking-[0.08em] text-[#5C6072]">
+                  ORDER SUMMARY
+                </h2>
               </div>
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="mt-2 w-full h-13 rounded-lg bg-[#0F42C0] hover:bg-[#1F06AC] text-white text-base font-bold transition-colors disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2 active:scale-[0.99]"
-              >
-                {submitting ? (
-                  <Loader2 size={20} className="animate-spin text-white" />
-                ) : (
-                  'Place Order'
-                )}
-              </button>
+              <div className="space-y-4 p-5">
+                <div className="space-y-3">
+                  {items.map((item) => {
+                    const lineTotal = calcLineTotal(
+                      item.unitPrice,
+                      item.quantity
+                    );
+                    const code = item.specimenCode?.replace('SP-', '') || '';
+                    return (
+                      <div
+                        key={item.productId}
+                        className="flex items-center justify-between gap-3"
+                      >
+                        <div className="flex min-w-0 items-center gap-3">
+                          <div className="h-11 w-11 shrink-0 overflow-hidden rounded-[6px] border border-[#ECEEF4] bg-[#F7F8FC]">
+                            <img
+                              src={item.imageUrl}
+                              alt={item.name}
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="m-0 truncate text-[13.5px] font-semibold text-[#121212]">
+                              {item.name}
+                            </p>
+                            <p className="sp-mono m-0 mt-0.5 text-[10.5px] uppercase tracking-[0.05em] text-[#7D8292]">
+                              № {code} · QTY {item.quantity}
+                            </p>
+                          </div>
+                        </div>
+                        <span className="shrink-0 text-[13.5px] font-semibold text-[#121212]">
+                          {formatPHP(lineTotal)}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
 
-              <div className="sp-mono text-[11px] text-[#4A4F78] text-center">
-                Inventory is reserved immediately upon placement
+                <div className="space-y-2 border-t border-dashed border-[#E2E4EC] pt-4 text-sm">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#5C6072]">Subtotal</span>
+                    <span className="font-semibold text-[#121212]">
+                      {formatPHP(subtotal)}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#5C6072]">Delivery</span>
+                    <span className="font-semibold text-[#121212]">Free</span>
+                  </div>
+                </div>
+
+                <div className="flex items-baseline justify-between border-t border-dashed border-[#E2E4EC] pt-4">
+                  <span className="text-base font-semibold text-[#121212]">
+                    Total
+                  </span>
+                  <span className="text-[24px] font-bold leading-none text-[#1F06AC]">
+                    {formatPHP(total)}
+                  </span>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="flex h-11 w-full cursor-pointer items-center justify-center rounded-[6px] bg-[#E5F24E] text-sm font-semibold text-[#1F06AC] transition-colors hover:bg-[#dce940] disabled:opacity-60"
+                >
+                  {submitting ? (
+                    <span className="inline-flex items-center gap-2">
+                      <Loader2 size={16} className="animate-spin" />
+                      Placing order...
+                    </span>
+                  ) : (
+                    `Place order · ${formatPHP(total)}`
+                  )}
+                </button>
+
+                <p className="sp-mono m-0 text-center text-[10px] leading-relaxed uppercase tracking-[0.05em] text-[#7D8292]">
+                  BY PLACING YOUR ORDER YOU AGREE TO THE TERMS OF SALE AND
+                  RETURNS POLICY.
+                </p>
               </div>
-            </div>
+            </aside>
           </form>
         )}
       </main>

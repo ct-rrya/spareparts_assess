@@ -3,6 +3,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { Category, Product } from '@/types';
 import { formatPHP } from '@/lib/money';
+import { CustomSelect } from '@/components/ui/CustomSelect';
 
 interface AdminProductsClientProps {
   initialProducts: Product[];
@@ -275,7 +276,7 @@ export function AdminProductsClient({
       {/* header matching design board */}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="font-catchye m-0 text-[36px] leading-none tracking-[-0.01em] text-[#121212]">
+          <h1 className="font-catchye m-0 text-[32px] sm:text-[36px] leading-none tracking-[-0.01em] text-[#121212]">
             Products
           </h1>
           <p className="sp-mono mt-2 mb-0 text-[11px] uppercase tracking-[0.08em] text-[#7D8292]">
@@ -288,9 +289,27 @@ export function AdminProductsClient({
         <button
           type="button"
           onClick={openAddModal}
-          className="h-10 cursor-pointer rounded-[6px] bg-[#E5F24E] px-4 text-[13px] font-semibold text-[#1F06AC] transition-colors hover:bg-[#dce940]"
+          className="hidden md:inline-flex h-10 cursor-pointer items-center rounded-[6px] bg-[#E5F24E] px-4 text-[13px] font-semibold text-[#1F06AC] transition-colors hover:bg-[#dce940]"
         >
           + Add product
+        </button>
+      </div>
+
+      {/* mobile search + add row */}
+      <div className="flex md:hidden items-center gap-2">
+        <input
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search name or SKU"
+          className="flex-1 min-w-0 h-10 rounded-[6px] border border-[#E2E4EC] bg-white px-3.5 text-sm text-[#121212] placeholder:text-[#9CA3AF] focus:border-[#1F06AC] focus:outline-none"
+        />
+        <button
+          type="button"
+          onClick={openAddModal}
+          className="h-10 shrink-0 cursor-pointer rounded-[6px] bg-[#E5F24E] px-4 text-[13px] font-semibold text-[#1F06AC] transition-colors hover:bg-[#dce940]"
+        >
+          + Add
         </button>
       </div>
 
@@ -309,8 +328,8 @@ export function AdminProductsClient({
         </div>
       )}
 
-      {/* filters */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      {/* desktop filters */}
+      <div className="hidden md:grid grid-cols-1 gap-3 sm:grid-cols-3">
         <input
           type="search"
           value={search}
@@ -319,33 +338,91 @@ export function AdminProductsClient({
           className="h-10 rounded-[6px] border border-[#E2E4EC] bg-white px-3.5 text-sm text-[#121212] placeholder:text-[#9CA3AF] focus:border-[#1F06AC] focus:outline-none"
         />
 
-        <select
+        <CustomSelect
           value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="h-10 rounded-[6px] border border-[#E2E4EC] bg-white px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
-        >
-          <option value="all">All categories</option>
-          {categories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name}
-            </option>
-          ))}
-        </select>
+          onChange={setCategoryFilter}
+          ariaLabel="Filter by category"
+          options={[
+            { value: 'all', label: 'All categories' },
+            ...categories.map((c) => ({ value: c.id, label: c.name })),
+          ]}
+        />
 
-        <select
+        <CustomSelect
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className="h-10 rounded-[6px] border border-[#E2E4EC] bg-white px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
-        >
-          <option value="all">All statuses</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="out-of-stock">Out of Stock (Active)</option>
-        </select>
+          onChange={setStatusFilter}
+          ariaLabel="Filter by status"
+          options={[
+            { value: 'all', label: 'All statuses' },
+            { value: 'active', label: 'Active' },
+            { value: 'inactive', label: 'Inactive' },
+            { value: 'out-of-stock', label: 'Out of Stock (Active)' },
+          ]}
+        />
       </div>
 
-      {/* simple neutral table */}
-      <div className="overflow-hidden rounded-[8px] border border-[#E2E4EC] bg-white">
+      {/* mobile product cards */}
+      <div className="md:hidden flex flex-col gap-2.5">
+        {filtered.length === 0 ? (
+          <div className="rounded-[8px] border border-[#E2E4EC] bg-white p-8 text-center text-sm text-[#7D8292]">
+            No products match your filter.
+          </div>
+        ) : (
+          filtered.map((p) => (
+            <div
+              key={p.id}
+              className="rounded-[8px] border border-[#E2E4EC] bg-white p-3 flex items-center gap-3"
+            >
+              <div className="h-14 w-14 rounded-md bg-[#EEF1FB] border border-[#E2E4EC] overflow-hidden shrink-0 flex items-center justify-center">
+                {p.image_url ? (
+                  <img
+                    src={p.image_url}
+                    alt={p.name}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span className="sp-mono text-[10px] text-[#7D8292]">IMG</span>
+                )}
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <p className="text-[13.5px] font-semibold text-[#121212] truncate m-0">
+                    {p.name}
+                  </p>
+                  {!p.is_active && (
+                    <span className="sp-mono text-[9px] uppercase text-[#7D8292] shrink-0">
+                      INACTIVE
+                    </span>
+                  )}
+                </div>
+                <p className="sp-mono text-[10.5px] text-[#7D8292] mt-0.5 mb-0 truncate">
+                  {p.specimen_code}
+                </p>
+                <div className="flex items-center gap-2.5 mt-1">
+                  <span className="text-[13px] font-bold text-[#1F06AC]">
+                    {formatPHP(p.price)}
+                  </span>
+                  <span className="sp-mono text-[10.5px] text-[#5C6072]">
+                    STOCK {p.stock}
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => openProductModal(p)}
+                className="shrink-0 h-9 px-3.5 rounded-md border border-[#D5DCF3] bg-white hover:bg-[#F7F8FC] text-xs font-semibold text-[#1F06AC] cursor-pointer"
+              >
+                Edit
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* simple neutral table (desktop) */}
+      <div className="hidden md:block overflow-hidden rounded-[8px] border border-[#E2E4EC] bg-white">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[600px] border-collapse text-left text-sm">
             <thead>
@@ -395,14 +472,7 @@ export function AdminProductsClient({
                           onClick={() => openProductModal(p)}
                           className="cursor-pointer text-[#121212] hover:text-[#1F06AC] hover:underline"
                         >
-                          View
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => openProductModal(p)}
-                          className="cursor-pointer text-[#5C6072] hover:text-[#121212] hover:underline"
-                        >
-                          Edit
+                          Details
                         </button>
                         <button
                           type="button"
@@ -539,23 +609,20 @@ export function AdminProductsClient({
                   </div>
 
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-                    <label className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1">
                       <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">
                         CATEGORY *
                       </span>
-                      <select
-                        required
+                      <CustomSelect
                         value={categoryId}
-                        onChange={(e) => setCategoryId(e.target.value)}
-                        className="h-10 rounded-[6px] border border-[#E2E4EC] bg-white px-3 text-sm text-[#121212] focus:border-[#1F06AC] focus:outline-none"
-                      >
-                        {categories.map((c) => (
-                          <option key={c.id} value={c.id}>
-                            {c.name}
-                          </option>
-                        ))}
-                      </select>
-                    </label>
+                        onChange={setCategoryId}
+                        ariaLabel="Product category"
+                        options={categories.map((c) => ({
+                          value: c.id,
+                          label: c.name,
+                        }))}
+                      />
+                    </div>
 
                     <label className="flex flex-col gap-1">
                       <span className="sp-mono text-[10px] uppercase tracking-[0.08em] text-[#7D8292]">

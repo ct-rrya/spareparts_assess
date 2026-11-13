@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { Category } from '@/types';
-import { Loader2, Menu, Search, X } from 'lucide-react';
+import { Loader2, Menu, Search, ShoppingCart, X } from 'lucide-react';
 
 interface StoreHeaderProps {
   categories?: Category[];
@@ -30,28 +30,28 @@ export function StoreHeader({ categories = [] }: StoreHeaderProps) {
   return (
     <div className="sticky top-0 z-40 bg-white">
       <header className="border-b border-[#D5DCF3] bg-white">
-        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 h-[60px] sm:h-[72px] flex items-center justify-between gap-4 sm:gap-8">
-          {/* brand logo with flask mark */}
+        <div className="max-w-[1240px] mx-auto px-4 sm:px-6 lg:px-8 h-[60px] sm:h-[72px] grid grid-cols-[1fr_auto_1fr] items-center gap-2 lg:flex lg:justify-between lg:gap-8">
+          {/* mobile hamburger on left */}
+          <button
+            type="button"
+            onClick={() => setMenuOpen((v) => !v)}
+            aria-label="Toggle navigation menu"
+            className="lg:hidden justify-self-start rounded-lg border border-[#C9D2F0] h-9 w-9 flex items-center justify-center text-[#0E0B33] bg-white cursor-pointer shrink-0"
+          >
+            {menuOpen ? <X size={16} /> : <Menu size={16} />}
+          </button>
+
+          {/* brand logo (centered on mobile, left on desktop) */}
           <Link
             href="/"
-            className="flex items-center gap-2.5 text-[#0E0B33] no-underline shrink-0"
+            className="justify-self-center lg:justify-self-start flex items-center gap-1.5 sm:gap-2 text-[#0E0B33] no-underline shrink-0"
           >
-            <span className="w-7 h-7 sm:w-[30px] sm:h-[30px] rounded-lg bg-[#1F06AC] flex items-center justify-center shrink-0">
-              <svg
-                aria-hidden="true"
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#E3EF4F"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M8 3h8M9 3v6l-4.5 9A2 2 0 006.3 21h11.4a2 2 0 001.8-3L15 9V3M7.5 15h9" />
-              </svg>
-            </span>
-            <span className="font-catchye text-2xl sm:text-[28px] tracking-wide text-[#1F06AC]">
+            <img
+              src="/images/logo.svg"
+              alt="SpareParts"
+              className="h-5 w-5 sm:h-9 sm:w-9 object-contain shrink-0"
+            />
+            <span className="font-catchye text-[19px] sm:text-[28px] tracking-wide text-[#1F06AC]">
               SpareParts
             </span>
           </Link>
@@ -106,40 +106,31 @@ export function StoreHeader({ categories = [] }: StoreHeaderProps) {
             </div>
           </form>
 
-          {/* cart and mobile triggers */}
-          <div className="flex items-center gap-2">
+          {/* cart and mobile search trigger */}
+          <div className="justify-self-end flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => setMenuOpen(true)}
+              aria-label="Open search"
+              className="md:hidden rounded-lg border border-[#C9D2F0] h-9 w-9 flex items-center justify-center text-[#0E0B33] bg-white cursor-pointer"
+            >
+              <Search size={15} />
+            </button>
+
             <Link
               href="/cart"
-              className="inline-flex items-center gap-2 rounded-lg bg-[#1F06AC] hover:bg-[#170485] text-white px-3.5 sm:px-4 h-11 text-sm font-semibold transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg bg-[#1F06AC] hover:bg-[#170485] text-white px-2.5 sm:px-4 h-9 sm:h-11 text-sm font-semibold transition-colors cursor-pointer"
             >
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#E3EF4F"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              <ShoppingCart
+                size={15}
+                className="sm:w-[18px] sm:h-[18px] text-[#E3EF4F]"
                 aria-hidden="true"
-              >
-                <path d="M6 7h12l-1 12H7L6 7z" />
-                <path d="M9 7a3 3 0 016 0" />
-              </svg>
+              />
               <span className="hidden sm:inline">Cart</span>
-              <span className="sp-mono bg-[#E3EF4F] text-[#1F06AC] text-xs font-bold px-2 py-0.5 rounded-full min-w-[20px] text-center">
+              <span className="sp-mono bg-[#E3EF4F] text-[#1F06AC] text-[11px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 rounded-full min-w-[18px] sm:min-w-[20px] text-center">
                 {hydrated ? itemCount : 0}
               </span>
             </Link>
-
-            <button
-              type="button"
-              onClick={() => setMenuOpen((v) => !v)}
-              aria-label="Toggle navigation menu"
-              className="lg:hidden rounded-lg border border-[#C9D2F0] h-11 w-11 flex items-center justify-center text-[#0E0B33] bg-white cursor-pointer"
-            >
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
           </div>
         </div>
       </header>

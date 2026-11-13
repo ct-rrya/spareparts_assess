@@ -8,8 +8,15 @@ export function StoreFooter() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
           {/* brand summary */}
           <div className="col-span-2 lg:col-span-1 flex flex-col gap-2">
-            <div className="font-catchye text-2xl sm:text-[30px] font-normal text-white tracking-wide">
-              SpareParts
+            <div className="flex items-center gap-2.5">
+              <img
+                src="/images/favicon.svg"
+                alt="SpareParts"
+                className="h-8 w-8 object-contain shrink-0"
+              />
+              <div className="font-catchye text-2xl sm:text-[30px] font-normal text-white tracking-wide">
+                SpareParts
+              </div>
             </div>
             <div className="sp-mono text-xs tracking-widest text-[#E3EF4F] font-semibold mt-1">
               LABORATORY &amp; SCIENCE SUPPLIES
@@ -69,32 +76,32 @@ export function StoreFooter() {
               Products &amp; Stock
             </Link>
             <a
-              href="#top"
+              href="https://www.facebook.com/"
               className="text-[#DDE5FB] hover:text-white transition-colors"
             >
-              Facebook (Demo)
+              Facebook
             </a>
             <a
-              href="#top"
+              href="https://www.instagram.com/"
               className="text-[#DDE5FB] hover:text-white transition-colors"
             >
-              Instagram (Demo)
+              Instagram
             </a>
           </div>
 
           {/* sample contact details (clearly labeled fictional per rubric) */}
           <div className="col-span-2 lg:col-span-1 flex flex-col gap-2.5 text-sm pt-4 sm:pt-0 border-t border-[#5882E8]/30 sm:border-t-0">
             <span className="sp-mono text-xs font-semibold tracking-wider text-[#E3EF4F] mb-1">
-              CONTACT (FICTIONAL DEMO)
+              CONTACT
             </span>
             <span className="text-[#DDE5FB]">
-              Email: orders@spareparts-demo.example
+              Email: orders@spareparts.example
             </span>
             <span className="text-[#DDE5FB]">
-              Phone: +63 2 8555 0142 (Demo)
+              Phone: +63 922 9222
             </span>
             <span className="text-[#DDE5FB]">
-              Address: 108 Science Park Ave, Quezon City
+              Address: City of Bogo, Cebu
             </span>
           </div>
         </div>
@@ -102,7 +109,7 @@ export function StoreFooter() {
         {/* copyright subfooter */}
         <div className="sp-mono mt-12 pt-5 border-t border-[#5882E8]/40 text-xs text-[#DDE5FB]/80 flex flex-wrap justify-between gap-3">
           <span>© {new Date().getFullYear()} SpareParts. All rights reserved.</span>
-          <span>TERMS · PRIVACY · CUBETECH DEMO</span>
+          <span>TERMS · PRIVACY · EDAÑO</span>
         </div>
       </div>
     </footer>
