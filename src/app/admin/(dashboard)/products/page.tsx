@@ -1,6 +1,5 @@
 import React from 'react';
-import { getStorageMode, listCategories, listProducts } from '@/lib/db';
-import { AdminShell } from '@/components/admin/AdminShell';
+import { listCategories, listProducts } from '@/lib/db';
 import { AdminProductsClient } from '@/components/admin/AdminProductsClient';
 
 export const dynamic = 'force-dynamic';
@@ -11,10 +10,5 @@ export default async function AdminProductsPage() {
     listCategories(),
   ]);
 
-  return (
-    <AdminShell storageMode={getStorageMode()}>
-      <AdminProductsClient initialProducts={products} categories={categories} />
-    </AdminShell>
-  );
+  return <AdminProductsClient initialProducts={products} categories={categories} />;
 }
-

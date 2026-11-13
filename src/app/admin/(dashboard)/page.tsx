@@ -1,19 +1,15 @@
 import React from 'react';
 import Link from 'next/link';
-import { getAdminOverviewStats, getStorageMode } from '@/lib/db';
+import { getAdminOverviewStats } from '@/lib/db';
 import { formatPHP } from '@/lib/money';
-import { AdminShell } from '@/components/admin/AdminShell';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminOverviewPage() {
-  const [stats, storageMode] = await Promise.all([
-    getAdminOverviewStats(),
-    Promise.resolve(getStorageMode()),
-  ]);
+  const stats = await getAdminOverviewStats();
 
   return (
-    <AdminShell storageMode={storageMode}>
+    <>
       <div className="border-b border-[#D5DCF3] pb-4">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0E0B33] m-0">
           Dashboard Overview
@@ -144,6 +140,6 @@ export default async function AdminOverviewPage() {
           </div>
         )}
       </div>
-    </AdminShell>
+    </>
   );
 }

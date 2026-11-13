@@ -1,7 +1,6 @@
 import React from 'react';
-import { getStorageMode, listDerivedCustomers } from '@/lib/db';
+import { listDerivedCustomers } from '@/lib/db';
 import { formatPHP } from '@/lib/money';
-import { AdminShell } from '@/components/admin/AdminShell';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,7 +8,7 @@ export default async function AdminCustomersPage() {
   const customers = await listDerivedCustomers();
 
   return (
-    <AdminShell storageMode={getStorageMode()}>
+    <>
       <div>
         <div className="text-xs sp-mono text-[#4A4F78] mb-1">RECORDS / DIRECTORY</div>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0E0B33] m-0">
@@ -64,6 +63,6 @@ export default async function AdminCustomersPage() {
           </tbody>
         </table>
       </div>
-    </AdminShell>
+    </>
   );
 }
