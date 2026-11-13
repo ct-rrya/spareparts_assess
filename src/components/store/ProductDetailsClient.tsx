@@ -94,7 +94,7 @@ export function ProductDetailsClient({ product }: { product: Product }) {
             </Link>
           </div>
 
-          <h1 className="font-catchye text-3xl sm:text-4xl lg:text-[46px] font-normal tracking-tight text-[#0E0B33] mt-2 mb-0 leading-tight">
+          <h1 className="font-sans text-2xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-[#0E0B33] mt-2 mb-0 leading-tight">
             {product.name}
           </h1>
         </div>
