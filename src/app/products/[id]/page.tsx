@@ -50,16 +50,20 @@ export default async function ProductDetailsPage({
     );
   }
 
-  const related = activeProducts
-    .filter((p) => p.category_id === product.category_id && p.id !== product.id)
-    .slice(0, 3);
+  const sameCategory = activeProducts.filter(
+    (p) => p.category_id === product.category_id && p.id !== product.id
+  );
+  const others = activeProducts.filter(
+    (p) => p.category_id !== product.category_id && p.id !== product.id
+  );
+  const related = [...sameCategory, ...others].slice(0, 6);
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-900">
       <StoreHeader categories={categories} />
 
-      <main className="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 flex-1">
-        <nav className="text-sm text-slate-500 mb-6 flex flex-wrap gap-2">
+      <main className="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-5 pb-12 flex-1">
+        <nav className="text-xs sm:text-sm text-slate-500 mb-4 flex flex-wrap gap-2">
           <Link href="/" className="hover:text-slate-900">
             Home
           </Link>
@@ -74,20 +78,20 @@ export default async function ProductDetailsPage({
         <ProductDetailsClient product={product} />
 
         {related.length > 0 && (
-          <section className="pt-16">
-            <div className="flex flex-wrap justify-between items-end border-b border-slate-200 pb-4 mb-6 gap-3">
-              <h2 className="text-2xl font-bold tracking-tight text-slate-900 m-0">
+          <section className="pt-12 sm:pt-14">
+            <div className="flex flex-wrap justify-between items-end border-b border-[#D5DCF3] pb-3 mb-5 gap-3">
+              <h2 className="font-catchye text-2xl sm:text-3xl font-normal tracking-tight text-[#0E0B33] m-0">
                 Related Products
               </h2>
               <Link
                 href={`/products?category=${product.category?.slug || ''}`}
-                className="text-sm font-semibold text-[#1F06AC] hover:underline"
+                className="sp-mono text-xs font-semibold text-[#0F42C0] hover:underline uppercase"
               >
                 View category →
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5 lg:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 sm:gap-3">
               {related.map((item) => (
                 <ProductCard key={item.id} product={item} />
               ))}
