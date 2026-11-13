@@ -77,7 +77,7 @@ export function ProductListingClient({
   }, [initialProducts, search, selectedCategories, minPrice, maxPrice, sortOrder]);
 
   return (
-    <div className="max-w-[1240px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
+    <div className="max-w-[1360px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
       {/* breadcrumb */}
       <div className="sp-mono text-xs font-semibold tracking-wider text-[#4A4F78] mb-4">
         <Link href="/" className="text-[#0F42C0] hover:underline">
@@ -151,7 +151,7 @@ export function ProductListingClient({
         })}
       </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[230px_1fr] gap-6 items-start">
         {/* filter sidebar matching design board */}
         <aside className="flex flex-col gap-5 lg:sticky lg:top-24">
           {/* category filter */}
@@ -287,7 +287,7 @@ export function ProductListingClient({
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-3">
               {filtered.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}

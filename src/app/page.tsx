@@ -13,8 +13,8 @@ export default async function HomePage() {
     listProducts({ activeOnly: true }),
   ]);
 
-  const featuredProducts = activeProducts.filter((p) => p.is_featured).slice(0, 4);
-  const displayFeatured = featuredProducts.length > 0 ? featuredProducts : activeProducts.slice(0, 4);
+  const featuredProducts = activeProducts.filter((p) => p.is_featured).slice(0, 6);
+  const displayFeatured = featuredProducts.length > 0 ? featuredProducts : activeProducts.slice(0, 6);
 
   return (
     <div id="top" className="min-h-screen flex flex-col bg-[#F6F7FB] text-[#0E0B33]">
@@ -197,7 +197,7 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 sm:gap-3">
             {displayFeatured.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
