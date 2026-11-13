@@ -8,7 +8,7 @@ export default function NotFound() {
         <div className="sp-mono text-xs font-bold text-[#0F42C0] bg-[#EAEFFC] px-3 py-1 rounded-full uppercase tracking-wider inline-block mb-3">
           404 · NOT FOUND
         </div>
-        <h1 className="text-2xl font-bold text-[#0E0B33] m-0 mb-2">
+        <h1 className="font-catchye text-3xl font-normal text-[#0E0B33] m-0 mb-2">
           Specimen Not Located
         </h1>
         <p className="text-sm text-[#4A4F78] leading-relaxed mb-6">

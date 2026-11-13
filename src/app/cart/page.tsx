@@ -27,8 +27,8 @@ export default function CartPage() {
 
         <div className="flex flex-wrap justify-between items-end border-b border-[#D5DCF3] pb-4 mb-8 gap-4">
           <div>
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#0E0B33] m-0">
-              Shopping Cart
+            <h1 className="font-catchye text-4xl sm:text-5xl font-normal tracking-tight text-[#0E0B33] m-0">
+              Your cart
             </h1>
             <div className="sp-mono text-xs text-[#4A4F78] mt-1.5 uppercase">
               {items.length} {items.length === 1 ? 'Line Item' : 'Line Items'}
@@ -48,7 +48,7 @@ export default function CartPage() {
           </div>
         ) : items.length === 0 ? (
           <div className="rounded-lg border border-[#D5DCF3] bg-white p-12 text-center flex flex-col items-center gap-3">
-            <div className="text-xl font-bold text-[#0E0B33]">
+            <div className="font-catchye text-2xl sm:text-3xl font-normal text-[#0E0B33]">
               Your cart is empty
             </div>
             <p className="text-base text-[#4A4F78] m-0 max-w-md leading-relaxed">

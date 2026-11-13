@@ -50,8 +50,8 @@ export function StoreHeader({ categories = [] }: StoreHeaderProps) {
                 <path d="M8 3h8M9 3v6l-4.5 9A2 2 0 006.3 21h11.4a2 2 0 001.8-3L15 9V3M7.5 15h9" />
               </svg>
             </span>
-            <span className="text-xl sm:text-[24px] font-bold tracking-tight text-[#1F06AC]">
-              Spare<span className="text-[#0F42C0]">Parts</span>
+            <span className="font-catchye text-2xl sm:text-[28px] tracking-wide text-[#1F06AC]">
+              SpareParts
             </span>
           </Link>
 

@@ -28,7 +28,7 @@ export default async function HomePage() {
               LABORATORY &amp; SCIENCE SUPPLIES
             </div>
 
-            <h1 className="mt-4 text-3xl sm:text-5xl lg:text-[54px] font-bold leading-[1.1] tracking-tight text-white m-0">
+            <h1 className="mt-4 font-catchye text-3xl sm:text-5xl lg:text-[54px] font-normal leading-[1.1] tracking-tight text-white m-0">
               Everything your lab needs. Catalogued.
             </h1>
 
@@ -135,7 +135,7 @@ export default async function HomePage() {
           </div>
 
           <div className="flex flex-wrap justify-between items-baseline mb-4 sm:mb-6 gap-2">
-            <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#0E0B33] m-0">
+            <h2 className="font-catchye text-2xl sm:text-3xl lg:text-[34px] font-normal text-[#0E0B33] m-0">
               Shop by category
             </h2>
             <span className="sp-mono text-xs text-[#4A4F78] uppercase">
@@ -158,7 +158,7 @@ export default async function HomePage() {
                       {code}
                     </span>
                     <div>
-                      <h3 className="text-base sm:text-xl font-bold text-[#0E0B33] leading-snug m-0">
+                      <h3 className="font-catchye text-lg sm:text-xl font-normal text-[#0E0B33] leading-snug m-0">
                         {cat.name}
                       </h3>
                       <div className="sp-mono text-[11px] sm:text-xs text-[#4A4F78] mt-1 uppercase">
@@ -186,7 +186,7 @@ export default async function HomePage() {
           </div>
 
           <div className="flex flex-wrap justify-between items-baseline mb-4 sm:mb-6 gap-2">
-            <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-bold text-[#0E0B33] m-0">
+            <h2 className="font-catchye text-2xl sm:text-3xl lg:text-[34px] font-normal text-[#0E0B33] m-0">
               Featured specimens
             </h2>
             <Link

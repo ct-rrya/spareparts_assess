@@ -63,7 +63,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.category?.name?.split('&')[0].trim() || 'SUPPLIES'}
         </span>
 
-        <h3 className="text-sm sm:text-[18px] font-bold text-[#0E0B33] leading-snug line-clamp-2 min-h-[38px] sm:min-h-[48px] m-0">
+        <h3 className="font-catchye text-base sm:text-[20px] font-normal text-[#0E0B33] leading-snug line-clamp-2 min-h-[40px] sm:min-h-[50px] m-0">
           <Link
             href={`/products/${product.slug}`}
             className="hover:text-[#0F42C0] transition-colors"

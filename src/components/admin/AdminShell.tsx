@@ -34,7 +34,7 @@ export function AdminShell({
       {/* mobile topbar */}
       <div className="md:hidden bg-[#1F06AC] text-white px-4 py-3.5 flex items-center justify-between border-b border-[#5882E8]/40 sticky top-0 z-40">
         <div className="flex items-center gap-2">
-          <span className="text-lg font-bold">SpareParts</span>
+          <span className="font-catchye text-xl tracking-wide">SpareParts</span>
           <span className="sp-mono bg-[#E3EF4F] text-[#1F06AC] text-[10px] font-bold px-2 py-0.5 rounded">
             ADMIN
           </span>
@@ -57,8 +57,8 @@ export function AdminShell({
       >
         {/* desktop logo */}
         <div className="hidden md:flex items-center justify-between px-2 pb-6 border-b border-[#5882E8]/40 mb-3">
-          <div className="text-xl font-bold tracking-tight text-white">
-            Spare<span className="text-[#E3EF4F]">Parts</span>
+          <div className="font-catchye text-2xl tracking-wide text-white">
+            SpareParts
           </div>
           <span className="sp-mono bg-[#E3EF4F] text-[#1F06AC] text-[10px] font-bold px-2 py-0.5 rounded">
             ADMIN

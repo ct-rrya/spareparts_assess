@@ -89,7 +89,7 @@ export function ProductListingClient({
       {/* header banner */}
       <div className="flex flex-wrap justify-between items-end border-b border-[#D5DCF3] pb-6 mb-6 gap-4">
         <div>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#0E0B33] m-0">
+          <h1 className="font-catchye text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[#0E0B33] m-0">
             Catalog
           </h1>
           <div className="sp-mono text-xs text-[#4A4F78] mt-2 uppercase">

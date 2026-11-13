@@ -134,7 +134,7 @@ export default function CheckoutPage() {
         </div>
 
         <div className="border-b border-[#D5DCF3] pb-4 mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#0E0B33] m-0">
+          <h1 className="font-catchye text-4xl sm:text-5xl font-normal tracking-tight text-[#0E0B33] m-0">
             Checkout
           </h1>
           <div className="sp-mono text-xs text-[#4A4F78] mt-1.5 uppercase">
@@ -148,7 +148,7 @@ export default function CheckoutPage() {
           </div>
         ) : items.length === 0 ? (
           <div className="rounded-lg border border-[#D5DCF3] bg-white p-12 text-center flex flex-col items-center gap-3">
-            <div className="text-xl font-bold text-[#0E0B33]">Your cart is empty</div>
+            <div className="font-catchye text-2xl sm:text-3xl font-normal text-[#0E0B33]">Your cart is empty</div>
             <p className="text-base text-[#4A4F78] m-0">
               You cannot check out with an empty cart.
             </p>

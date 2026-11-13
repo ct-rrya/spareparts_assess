@@ -8,8 +8,8 @@ export function StoreFooter() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
           {/* brand summary */}
           <div className="col-span-2 lg:col-span-1 flex flex-col gap-2">
-            <div className="text-2xl sm:text-[28px] font-bold text-white tracking-tight">
-              Spare<span className="text-[#E3EF4F]">Parts</span>
+            <div className="font-catchye text-2xl sm:text-[30px] font-normal text-white tracking-wide">
+              SpareParts
             </div>
             <div className="sp-mono text-xs tracking-widest text-[#E3EF4F] font-semibold mt-1">
               LABORATORY &amp; SCIENCE SUPPLIES
