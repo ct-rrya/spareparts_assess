@@ -1117,25 +1117,76 @@ export async function listDerivedCustomers(): Promise<CustomerSummary[]> {
 }
 
 export async function getAdminOverviewStats() {
-  const [products, orders, customers] = await Promise.all([
+  const [products, categories, orders, customers] = await Promise.all([
     listProducts(),
+    listCategories(),
     listOrders(),
     listDerivedCustomers(),
   ]);
 
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
   const pendingOrders = orders.filter((o) => o.status === 'Pending').length;
+  const actionOrders = orders.filter(
+    (o) =>
+      o.status === 'Pending' ||
+      o.status === 'Confirmed' ||
+      o.status === 'Preparing'
+  ).length;
   const completedOrders = orders.filter((o) => o.status === 'Completed').length;
+
+  const monthlySalesCentavos = orders
+    .filter((o) => {
+      if (o.status === 'Cancelled') return false;
+      const d = new Date(o.created_at);
+      return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
+    })
+    .reduce((sum, o) => sum + toCentavos(o.total), 0);
+
   const totalSalesCentavos = orders
     .filter((o) => o.status === 'Completed')
     .reduce((sum, o) => sum + toCentavos(o.total), 0);
 
+  // build last 7 days revenue buckets ending today
+  const dayNames = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  const last7DaysSales = Array.from({ length: 7 }, (_, idx) => {
+    const d = new Date(now);
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - (6 - idx));
+    const key = d.toISOString().slice(0, 10);
+    const dayCentavos = orders
+      .filter((o) => {
+        if (o.status === 'Cancelled') return false;
+        return new Date(o.created_at).toISOString().slice(0, 10) === key;
+      })
+      .reduce((sum, o) => sum + toCentavos(o.total), 0);
+
+    return {
+      date: key,
+      label: dayNames[d.getDay()],
+      total: fromCentavos(dayCentavos),
+    };
+  });
+
+  const lowStockProducts = products
+    .filter((p) => p.is_active && p.stock <= 5)
+    .sort((a, b) => a.stock - b.stock)
+    .slice(0, 5);
+
   return {
     totalProducts: products.length,
+    totalCategories: categories.length,
     totalOrders: orders.length,
     pendingOrders,
+    actionOrders,
     completedOrders,
     totalCustomers: customers.length,
     totalSales: fromCentavos(totalSalesCentavos),
+    monthlySales: fromCentavos(monthlySalesCentavos),
+    last7DaysSales,
+    lowStockProducts,
     recentOrders: orders.slice(0, 5),
   };
 }
