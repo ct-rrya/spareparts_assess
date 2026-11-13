@@ -41,7 +41,7 @@ export default async function ProductDetailsPage({
               href="/products"
               className="mt-2 rounded-md bg-[#1F06AC] text-white px-5 py-2.5 text-sm font-medium hover:bg-[#170485]"
             >
-              Back to Catalog
+              Back to Products
             </Link>
           </div>
         </main>

@@ -34,7 +34,7 @@ export default async function OrderConfirmationPage({
               href="/products"
               className="mt-2 rounded-lg bg-[#0F42C0] hover:bg-[#1F06AC] text-white px-6 h-11 inline-flex items-center text-sm font-semibold transition-colors"
             >
-              Return to Catalog
+              Return to Products
             </Link>
           </div>
         </main>

@@ -83,17 +83,17 @@ export function ProductListingClient({
         <Link href="/" className="text-[#0F42C0] hover:underline">
           HOME
         </Link>{' '}
-        / CATALOG
+        / PRODUCTS
       </div>
 
       {/* header banner */}
       <div className="flex flex-wrap justify-between items-end border-b border-[#D5DCF3] pb-6 mb-6 gap-4">
         <div>
           <h1 className="font-catchye text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[#0E0B33] m-0">
-            Catalog
+            Products
           </h1>
           <div className="sp-mono text-xs text-[#4A4F78] mt-2 uppercase">
-            {initialProducts.length} Specimens · {categories.length} Categories
+            {initialProducts.length} Items · {categories.length} Categories
           </div>
         </div>
 
@@ -103,7 +103,7 @@ export function ProductListingClient({
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search name or catalog №..."
+            placeholder="Search name or SKU №..."
             aria-label="Filter products"
             className="w-full h-11 sm:h-12 rounded-lg border border-[#C9D2F0] bg-white pl-10 pr-3.5 text-sm text-[#0E0B33] placeholder:text-[#4A4F78] focus:outline-none focus:border-[#1F06AC]"
           />

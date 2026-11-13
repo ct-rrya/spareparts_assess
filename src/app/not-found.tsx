@@ -12,14 +12,14 @@ export default function NotFound() {
           Specimen Not Located
         </h1>
         <p className="text-sm text-[#4A4F78] leading-relaxed mb-6">
-          The requested catalog specimen or page could not be found in our requisitions system.
+          The requested product or page could not be found in our requisitions system.
         </p>
         <div className="flex gap-3 justify-center">
           <Link
             href="/products"
             className="inline-flex items-center justify-center h-11 px-5 rounded-lg bg-[#0F42C0] hover:bg-[#1F06AC] text-white text-sm font-bold transition-colors cursor-pointer"
           >
-            Browse Catalog
+            Browse Products
           </Link>
           <Link
             href="/"

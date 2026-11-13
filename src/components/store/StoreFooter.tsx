@@ -66,7 +66,7 @@ export function StoreFooter() {
               href="/products"
               className="text-[#DDE5FB] hover:text-white transition-colors"
             >
-              Catalog &amp; Availability
+              Products &amp; Stock
             </Link>
             <a
               href="#top"

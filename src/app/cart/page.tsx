@@ -53,13 +53,13 @@ export default function CartPage() {
             </div>
             <p className="text-base text-[#4A4F78] m-0 max-w-md leading-relaxed">
               You haven’t added any specimens or laboratory supplies yet. Browse our
-              catalog to begin your requisition.
+              products to begin your requisition.
             </p>
             <Link
               href="/products"
               className="mt-3 rounded-lg bg-[#0F42C0] hover:bg-[#1F06AC] text-white px-7 h-12 inline-flex items-center text-base font-bold transition-colors cursor-pointer"
             >
-              Browse Catalog
+              Browse Products
             </Link>
           </div>
         ) : (

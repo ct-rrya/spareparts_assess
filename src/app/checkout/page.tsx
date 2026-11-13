@@ -156,7 +156,7 @@ export default function CheckoutPage() {
               href="/products"
               className="mt-2 rounded-lg bg-[#0F42C0] hover:bg-[#1F06AC] text-white px-7 h-12 inline-flex items-center text-base font-bold transition-colors cursor-pointer"
             >
-              Browse Catalog
+              Browse Products
             </Link>
           </div>
         ) : (

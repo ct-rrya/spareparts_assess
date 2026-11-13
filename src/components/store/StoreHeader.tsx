@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useCart } from '@/context/CartContext';
 import { Category } from '@/types';
 import { Loader2, Menu, Search, X } from 'lucide-react';
@@ -13,6 +13,7 @@ interface StoreHeaderProps {
 
 export function StoreHeader({ categories = [] }: StoreHeaderProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { itemCount, hydrated } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -55,20 +56,28 @@ export function StoreHeader({ categories = [] }: StoreHeaderProps) {
             </span>
           </Link>
 
-          {/* desktop category navigation */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm sm:text-[15px] font-medium text-[#0E0B33]">
-            {categories.slice(0, 3).map((cat, idx) => (
-              <Link
-                key={cat.id}
-                href={`/products?category=${cat.slug}`}
-                className="flex items-center gap-1.5 hover:text-[#0F42C0] transition-colors py-2 whitespace-nowrap"
-              >
-                <span className="sp-mono text-xs text-[#0F42C0] font-semibold">
-                  {cat.code || `0${idx + 1}`}
-                </span>
-                <span>{cat.name}</span>
-              </Link>
-            ))}
+          {/* desktop simple navigation */}
+          <nav className="hidden lg:flex items-center gap-7 text-sm sm:text-[15px] font-semibold text-[#0E0B33]">
+            <Link
+              href="/"
+              className={`transition-colors py-2 ${
+                pathname === '/'
+                  ? 'text-[#0F42C0] border-b-2 border-[#0F42C0] font-bold'
+                  : 'text-[#0E0B33] hover:text-[#0F42C0]'
+              }`}
+            >
+              Home
+            </Link>
+            <Link
+              href="/products"
+              className={`transition-colors py-2 ${
+                pathname.startsWith('/products')
+                  ? 'text-[#0F42C0] border-b-2 border-[#0F42C0] font-bold'
+                  : 'text-[#0E0B33] hover:text-[#0F42C0]'
+              }`}
+            >
+              Products
+            </Link>
           </nav>
 
           <div className="flex-1 hidden md:block" />
@@ -83,8 +92,8 @@ export function StoreHeader({ categories = [] }: StoreHeaderProps) {
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search catalog..."
-                aria-label="Search catalog"
+                placeholder="Search products..."
+                aria-label="Search products"
                 className="w-full h-11 rounded-lg border border-[#C9D2F0] bg-white pl-9 pr-3 text-sm text-[#0E0B33] placeholder:text-[#4A4F78] focus:outline-none focus:border-[#1F06AC]"
               />
               <span className="absolute left-3 top-3 text-[#4A4F78] pointer-events-none">
@@ -143,7 +152,7 @@ export function StoreHeader({ categories = [] }: StoreHeaderProps) {
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search catalog..."
+              placeholder="Search products..."
               className="flex-1 h-11 rounded-lg border border-[#C9D2F0] px-3.5 text-sm bg-white"
             />
             <button
@@ -154,27 +163,29 @@ export function StoreHeader({ categories = [] }: StoreHeaderProps) {
             </button>
           </form>
 
-          <div className="flex flex-col gap-1 text-[15px] font-medium pt-1">
+          <div className="flex flex-col gap-1 text-[15px] font-semibold pt-1">
+            <Link
+              href="/"
+              onClick={() => setMenuOpen(false)}
+              className={`py-2.5 px-3 rounded-md transition-colors ${
+                pathname === '/'
+                  ? 'bg-[#EAEFFC] text-[#0F42C0] font-bold'
+                  : 'text-[#0E0B33] hover:bg-[#EAEFFC]'
+              }`}
+            >
+              Home
+            </Link>
             <Link
               href="/products"
               onClick={() => setMenuOpen(false)}
-              className="py-2.5 px-3 rounded-md hover:bg-[#EAEFFC] text-[#0E0B33]"
+              className={`py-2.5 px-3 rounded-md transition-colors ${
+                pathname.startsWith('/products')
+                  ? 'bg-[#EAEFFC] text-[#0F42C0] font-bold'
+                  : 'text-[#0E0B33] hover:bg-[#EAEFFC]'
+              }`}
             >
-              All Products
+              Products
             </Link>
-            {categories.map((cat, idx) => (
-              <Link
-                key={cat.id}
-                href={`/products?category=${cat.slug}`}
-                onClick={() => setMenuOpen(false)}
-                className="py-2.5 px-3 rounded-md hover:bg-[#EAEFFC] text-[#0E0B33] flex items-center justify-between"
-              >
-                <span>{cat.name}</span>
-                <span className="sp-mono text-xs text-[#0F42C0] font-semibold">
-                  {cat.code || `0${idx + 1}`}
-                </span>
-              </Link>
-            ))}
           </div>
         </div>
       )}

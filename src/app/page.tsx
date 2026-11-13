@@ -42,7 +42,7 @@ export default async function HomePage() {
                 href="/products"
                 className="inline-flex items-center justify-center h-[52px] sm:h-12 px-7 rounded-lg bg-[#E3EF4F] hover:bg-white text-[#1F06AC] text-base font-bold transition-colors cursor-pointer"
               >
-                Browse the catalog
+                Browse products
               </Link>
               <Link
                 href="/products?category=anatomy-physiology"
