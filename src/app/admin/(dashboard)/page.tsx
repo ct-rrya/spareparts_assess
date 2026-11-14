@@ -140,7 +140,7 @@ export default async function AdminOverviewPage() {
             {stats.totalOrders}
           </p>
           <p className="sp-mono mt-2.5 sm:mt-3 text-[10px] uppercase tracking-[0.06em] text-[#7D8292]">
-            {stats.actionOrders} NEED ACTION
+            {stats.pendingOrders} PENDING · {stats.completedOrders} COMPLETED
           </p>
         </div>
 
@@ -158,13 +158,13 @@ export default async function AdminOverviewPage() {
 
         <div className="rounded-[8px] border border-[#1F06AC] bg-[#1F06AC] p-4 sm:p-5 text-white">
           <p className="sp-mono text-[10px] uppercase tracking-[0.08em] text-white/75">
-            SALES
+            TOTAL SALES
           </p>
           <p className="mt-2 sm:mt-2.5 text-2xl sm:text-[30px] font-bold leading-none tracking-[-0.02em] text-white">
-            {formatPHP(stats.monthlySales)}
+            {formatPHP(stats.totalSales)}
           </p>
           <p className="sp-mono mt-2.5 sm:mt-3 text-[10px] uppercase tracking-[0.06em] text-white/80">
-            THIS MONTH
+            COMPLETED ORDERS
           </p>
         </div>
       </div>

@@ -64,27 +64,31 @@ export function AdminOrdersClient({
   initialOrders: Order[];
   nowMs?: number;
 }) {
-  const [statusFilter, setStatusFilter] = useState<'all' | 'Pending' | 'Shipped'>(
-    'all'
-  );
+  const [statusFilter, setStatusFilter] = useState<'all' | OrderStatus>('all');
   const [search, setSearch] = useState('');
 
   const counts = useMemo(() => {
-    const pending = initialOrders.filter((o) => o.status === 'Pending').length;
-    const shipped = initialOrders.filter((o) => o.status === 'Shipped').length;
-    const overduePending = initialOrders.filter((o) =>
-      isOverduePending(o, nowMs)
-    ).length;
-    const needAction = initialOrders.filter(
-      (o) =>
-        o.status === 'Pending' ||
-        o.status === 'Confirmed' ||
-        o.status === 'Preparing'
-    ).length;
+    const byStatus: Record<OrderStatus, number> = {
+      Pending: 0,
+      Confirmed: 0,
+      Preparing: 0,
+      Shipped: 0,
+      Completed: 0,
+      Cancelled: 0,
+    };
+    let overduePending = 0;
+
+    for (const o of initialOrders) {
+      byStatus[o.status] = (byStatus[o.status] || 0) + 1;
+      if (isOverduePending(o, nowMs)) overduePending += 1;
+    }
+
+    const needAction =
+      byStatus.Pending + byStatus.Confirmed + byStatus.Preparing;
+
     return {
       all: initialOrders.length,
-      pending,
-      shipped,
+      byStatus,
       overduePending,
       needAction,
     };
@@ -139,12 +143,16 @@ export function AdminOrdersClient({
       </div>
 
       {/* filter pills + search bar */}
-      <div className="flex flex-wrap items-center gap-3">
-        <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+        <div className="flex items-center gap-2 overflow-x-auto pb-0.5 scrollbar-none sm:flex-wrap sm:overflow-visible sm:pb-0">
           {[
             { key: 'all' as const, label: 'ALL', count: counts.all },
-            { key: 'Pending' as const, label: 'PENDING', count: counts.pending },
-            { key: 'Shipped' as const, label: 'SHIPPED', count: counts.shipped },
+            { key: 'Pending' as const, label: 'PENDING', count: counts.byStatus.Pending },
+            { key: 'Confirmed' as const, label: 'CONFIRMED', count: counts.byStatus.Confirmed },
+            { key: 'Preparing' as const, label: 'PREPARING', count: counts.byStatus.Preparing },
+            { key: 'Shipped' as const, label: 'SHIPPED', count: counts.byStatus.Shipped },
+            { key: 'Completed' as const, label: 'COMPLETED', count: counts.byStatus.Completed },
+            { key: 'Cancelled' as const, label: 'CANCELLED', count: counts.byStatus.Cancelled },
           ].map((pill) => {
             const active = statusFilter === pill.key;
             return (
@@ -152,7 +160,7 @@ export function AdminOrdersClient({
                 key={pill.key}
                 type="button"
                 onClick={() => setStatusFilter(pill.key)}
-                className={`sp-mono cursor-pointer rounded-full border px-4 py-2 text-[11px] font-medium uppercase tracking-[0.06em] transition-colors ${
+                className={`sp-mono shrink-0 cursor-pointer whitespace-nowrap rounded-full border px-3.5 py-2 text-[11px] font-medium uppercase tracking-[0.06em] transition-colors ${
                   active
                     ? 'border-[#1F06AC] bg-[#1F06AC] text-white'
                     : 'border-[#E2E4EC] bg-white text-[#5C6072] hover:border-[#1F06AC] hover:text-[#121212]'

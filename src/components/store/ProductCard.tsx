@@ -51,7 +51,7 @@ export function ProductCard({ product }: ProductCardProps) {
                 : 'bg-[#EAEFFC]/95 text-[#1F06AC]'
           }`}
         >
-          {isOutOfStock ? 'OUT' : specNumber}
+          {isOutOfStock ? 'OUT OF STOCK' : specNumber}
         </span>
       </Link>
 
@@ -84,7 +84,7 @@ export function ProductCard({ product }: ProductCardProps) {
             {formatPHP(product.price)}
           </span>
           <span className="text-[11px] text-[#4A4F78] whitespace-nowrap">
-            {isOutOfStock ? 'Restocking' : `${product.stock} left`}
+            {isOutOfStock ? 'Out of stock' : `${product.stock} left`}
           </span>
         </div>
 

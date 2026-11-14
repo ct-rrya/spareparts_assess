@@ -51,13 +51,11 @@ export default async function ProductDetailsPage({
     );
   }
 
-  const sameCategory = activeProducts.filter(
-    (p) => p.category_id === product.category_id && p.id !== product.id
-  );
-  const others = activeProducts.filter(
-    (p) => p.category_id !== product.category_id && p.id !== product.id
-  );
-  const related = [...sameCategory, ...others].slice(0, 6);
+  const related = activeProducts
+    .filter(
+      (p) => p.category_id === product.category_id && p.id !== product.id
+    )
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-slate-900">
